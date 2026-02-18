@@ -72,7 +72,8 @@ class WPPF_History_Manager {
 	public static function ajax_save_post_pin() {
 		check_ajax_referer( 'wppf_editor_nonce', 'nonce' );
 
-		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$post_id = (int) filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
+		$post_id = absint( $post_id );
 		if ( ! $post_id ) {
 			wp_send_json_error(
 				array(
@@ -91,10 +92,14 @@ class WPPF_History_Manager {
 			);
 		}
 
-		$is_pinned     = isset( $_POST['is_pinned'] ) ? wppf_rest_sanitize_boolean( wp_unslash( $_POST['is_pinned'] ) ) : true;
-		$skip_snapshot = isset( $_POST['skip_snapshot'] ) ? wppf_rest_sanitize_boolean( wp_unslash( $_POST['skip_snapshot'] ) ) : false;
-		$html      = isset( $_POST['html'] ) ? (string) wp_unslash( $_POST['html'] ) : '';
-		$html      = self::sanitize_html_for_user( $html );
+		$is_pinned_value = filter_input( INPUT_POST, 'is_pinned', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$is_pinned       = null === $is_pinned_value ? true : wppf_rest_sanitize_boolean( $is_pinned_value );
+
+		$skip_snapshot_value = filter_input( INPUT_POST, 'skip_snapshot', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$skip_snapshot       = null === $skip_snapshot_value ? false : wppf_rest_sanitize_boolean( $skip_snapshot_value );
+
+		$html_value = filter_input( INPUT_POST, 'html', FILTER_UNSAFE_RAW );
+		$html       = self::sanitize_html_for_user( is_string( $html_value ) ? $html_value : '' );
 
 		update_post_meta( $post_id, '_wppf_is_post_pinned', $is_pinned );
 		update_post_meta( $post_id, '_wppf_post_html', $html );
@@ -197,15 +202,14 @@ class WPPF_History_Manager {
 				'post_parent'            => $post_id,
 				'posts_per_page'         => -1,
 				'orderby'                => 'date',
-				'order'                  => 'DESC',
-				'fields'                 => 'ids',
-				'no_found_rows'          => true,
-				'ignore_sticky_posts'    => true,
-				'update_post_term_cache' => false,
-				'update_post_meta_cache' => false,
-				'suppress_filters'       => true,
-			)
-		);
+					'order'                  => 'DESC',
+					'fields'                 => 'ids',
+					'no_found_rows'          => true,
+					'ignore_sticky_posts'    => true,
+					'update_post_term_cache' => false,
+					'update_post_meta_cache' => false,
+				)
+			);
 
 		if ( count( $snapshot_ids ) <= $limit ) {
 			return;

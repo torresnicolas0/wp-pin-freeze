@@ -101,10 +101,6 @@ function wppf_maybe_deactivate_for_requirements() {
 	if ( function_exists( 'deactivate_plugins' ) ) {
 		deactivate_plugins( plugin_basename( WPPF_PLUGIN_FILE ) );
 	}
-
-	if ( isset( $_GET['activate'] ) ) {
-		unset( $_GET['activate'] );
-	}
 }
 
 /**
@@ -151,6 +147,7 @@ require_once WPPF_PLUGIN_DIR . 'includes/ajax-fetcher.php';
 class WPPF_Plugin {
 	const META_POST_PINNED = '_wppf_is_post_pinned';
 	const META_POST_HTML   = '_wppf_post_html';
+	const NOTICE_TRANSIENT = 'wppf_notice_user_';
 
 	/**
 	 * Boot hooks.
@@ -158,7 +155,6 @@ class WPPF_Plugin {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'plugins_loaded', array( __CLASS__, 'load_textdomain' ) );
 		add_action( 'init', array( __CLASS__, 'register_post_meta' ) );
 		add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'enqueue_editor_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_assets' ) );
@@ -185,15 +181,6 @@ class WPPF_Plugin {
 		if ( class_exists( 'WPPF_Ajax_Fetcher' ) ) {
 			WPPF_Ajax_Fetcher::init();
 		}
-	}
-
-	/**
-	 * Load translation files.
-	 *
-	 * @return void
-	 */
-	public static function load_textdomain() {
-		load_plugin_textdomain( 'pin-freeze', false, dirname( plugin_basename( WPPF_PLUGIN_FILE ) ) . '/languages' );
 	}
 
 	/**
@@ -542,12 +529,27 @@ class WPPF_Plugin {
 			return;
 		}
 
-		echo "<style id='wppf-admin-inline-css'>\n";
+		$css_rules = array();
 		foreach ( $pinned_ids as $post_id ) {
-			echo '#post-' . $post_id . " .row-title{color:#7b3ff2 !important;}\n";
-			echo '#post-' . $post_id . " .row-title:before{content:'\\f537';font-family:dashicons;display:inline-block;margin-right:4px;color:#7b3ff2;vertical-align:text-bottom;}\n";
+			$post_id = absint( $post_id );
+			if ( ! $post_id ) {
+				continue;
+			}
+
+			$css_rules[] = sprintf(
+				'#post-%1$d .row-title{color:#7b3ff2 !important;}#post-%1$d .row-title:before{content:"\\f537";font-family:dashicons;display:inline-block;margin-right:4px;color:#7b3ff2;vertical-align:text-bottom;}',
+				$post_id
+			);
 		}
-		echo "</style>\n";
+
+		if ( empty( $css_rules ) ) {
+			return;
+		}
+
+		printf(
+			"<style id='wppf-admin-inline-css'>\n%s\n</style>\n",
+			esc_html( implode( "\n", $css_rules ) )
+		);
 	}
 
 	/**
@@ -565,7 +567,7 @@ class WPPF_Plugin {
 			return;
 		}
 
-		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+		$post_id = isset( $_GET['post'] ) ? absint( wp_unslash( $_GET['post'] ) ) : 0;
 		if ( ! $post_id ) {
 			return;
 		}
@@ -588,8 +590,9 @@ class WPPF_Plugin {
 			$referer   = add_query_arg( 'post_type', $post_type, admin_url( 'edit.php' ) );
 		}
 
+		set_transient( self::NOTICE_TRANSIENT . get_current_user_id(), 'post_unpinned', MINUTE_IN_SECONDS );
+
 		$redirect = remove_query_arg( array( 'wppf_action', 'post', '_wpnonce' ), $referer );
-		$redirect = add_query_arg( 'wppf_notice', 'post_unpinned', $redirect );
 
 		wp_safe_redirect( $redirect );
 		exit;
@@ -601,11 +604,15 @@ class WPPF_Plugin {
 	 * @return void
 	 */
 	public static function admin_notices() {
-		if ( ! isset( $_GET['wppf_notice'] ) ) {
+		$transient_key = self::NOTICE_TRANSIENT . get_current_user_id();
+		$notice        = get_transient( $transient_key );
+
+		if ( ! is_string( $notice ) || '' === $notice ) {
 			return;
 		}
 
-		$notice = sanitize_key( wp_unslash( $_GET['wppf_notice'] ) );
+		delete_transient( $transient_key );
+		$notice = sanitize_key( $notice );
 		if ( 'post_unpinned' !== $notice ) {
 			return;
 		}

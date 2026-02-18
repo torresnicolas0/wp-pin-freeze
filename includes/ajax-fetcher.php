@@ -39,7 +39,7 @@ class WPPF_Ajax_Fetcher {
 	public static function ajax_fetch_frontend() {
 		check_ajax_referer( 'wppf_editor_nonce', 'nonce' );
 
-		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$post_id = isset( $_POST['post_id'] ) ? absint( wp_unslash( $_POST['post_id'] ) ) : 0;
 		if ( ! $post_id ) {
 			wp_send_json_error(
 				array(
