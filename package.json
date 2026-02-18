@@ -1,0 +1,17 @@
+{
+  "name": "wp-pin-freeze",
+  "version": "1.0.0",
+  "description": "Pin and freeze rendered HTML for Gutenberg blocks and full posts/pages.",
+  "license": "GPL-2.0-or-later",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "wp-scripts start --webpack-copy-php",
+    "build": "wp-scripts build --webpack-copy-php",
+    "lint:js": "wp-scripts lint-js src"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.23.0"
+  },
+  "author": "Nicolás Torres",
+  "homepage": "https://github.com/torresnicolas0/wp-pin-freeze"
+}
