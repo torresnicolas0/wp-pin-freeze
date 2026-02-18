@@ -1,5 +1,5 @@
 === Pin & Freeze ===
-Contributors: torresnicolas0
+Contributors: nicoto
 Donate link: https://github.com/sponsors/torresnicolas0
 Tags: gutenberg, blocks, html, caching, editor
 Requires at least: 5.2
