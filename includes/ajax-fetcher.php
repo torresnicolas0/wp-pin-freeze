@@ -43,7 +43,7 @@ class WPPF_Ajax_Fetcher {
 		if ( ! $post_id ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'ID de contenido inválido.', 'wp-pin-freeze' ),
+					'message' => __( 'ID de contenido inválido.', 'pin-freeze' ),
 				),
 				400
 			);
@@ -52,7 +52,7 @@ class WPPF_Ajax_Fetcher {
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'No tienes permisos para capturar este contenido.', 'wp-pin-freeze' ),
+					'message' => __( 'No tienes permisos para capturar este contenido.', 'pin-freeze' ),
 				),
 				403
 			);
@@ -62,7 +62,7 @@ class WPPF_Ajax_Fetcher {
 		if ( ! $permalink ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'No se pudo generar el permalink del contenido.', 'wp-pin-freeze' ),
+					'message' => __( 'No se pudo generar el permalink del contenido.', 'pin-freeze' ),
 				),
 				500
 			);
@@ -82,7 +82,7 @@ class WPPF_Ajax_Fetcher {
 		if ( '' === trim( $raw_html ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'La respuesta del frontend llegó vacía.', 'wp-pin-freeze' ),
+					'message' => __( 'La respuesta del frontend llegó vacía.', 'pin-freeze' ),
 				),
 				500
 			);
@@ -159,18 +159,18 @@ class WPPF_Ajax_Fetcher {
 				? $fallback_response->get_error_message()
 				: sprintf(
 					/* translators: %d: HTTP status code. */
-					__( 'HTTP %d', 'wp-pin-freeze' ),
+					__( 'HTTP %d', 'pin-freeze' ),
 					(int) wp_remote_retrieve_response_code( $fallback_response )
 				);
 		} else {
-			$fallback_error = __( 'No se pudo construir URL de fallback local.', 'wp-pin-freeze' );
+			$fallback_error = __( 'No se pudo construir URL de fallback local.', 'pin-freeze' );
 		}
 
 		$primary_error = is_wp_error( $response )
 			? $response->get_error_message()
 			: sprintf(
 				/* translators: %d: HTTP status code. */
-				__( 'HTTP %d', 'wp-pin-freeze' ),
+				__( 'HTTP %d', 'pin-freeze' ),
 				(int) wp_remote_retrieve_response_code( $response )
 			);
 
@@ -178,7 +178,7 @@ class WPPF_Ajax_Fetcher {
 			'fetch_failed',
 			sprintf(
 				/* translators: 1: primary error, 2: fallback error. */
-				__( 'No se pudo capturar el frontend. Remoto: %1$s. Fallback local: %2$s.', 'wp-pin-freeze' ),
+				__( 'No se pudo capturar el frontend. Remoto: %1$s. Fallback local: %2$s.', 'pin-freeze' ),
 				$primary_error,
 				$fallback_error
 			)
@@ -196,7 +196,7 @@ class WPPF_Ajax_Fetcher {
 			'redirection' => 3,
 			'headers'     => array(
 				'Accept'     => 'text/html,application/xhtml+xml',
-				'User-Agent' => 'WP Pin & Freeze/' . WPPF_VERSION,
+				'User-Agent' => 'Pin & Freeze/' . WPPF_VERSION,
 			),
 		);
 	}
@@ -230,7 +230,7 @@ class WPPF_Ajax_Fetcher {
 	 */
 	private static function extract_selector_html( $document_html, $selector ) {
 		if ( ! class_exists( 'DOMDocument' ) ) {
-			return new WP_Error( 'dom_missing', __( 'DOMDocument no está disponible en este servidor.', 'wp-pin-freeze' ) );
+			return new WP_Error( 'dom_missing', __( 'DOMDocument no está disponible en este servidor.', 'pin-freeze' ) );
 		}
 
 		$selector = trim( (string) $selector );
@@ -242,7 +242,7 @@ class WPPF_Ajax_Fetcher {
 		if ( '' === $xpath_query ) {
 			return new WP_Error(
 				'invalid_selector',
-				__( 'El selector configurado es inválido. Usa #id, .class o nombre de etiqueta.', 'wp-pin-freeze' )
+				__( 'El selector configurado es inválido. Usa #id, .class o nombre de etiqueta.', 'pin-freeze' )
 			);
 		}
 
@@ -253,7 +253,7 @@ class WPPF_Ajax_Fetcher {
 		libxml_use_internal_errors( $previous_errors );
 
 		if ( ! $loaded ) {
-			return new WP_Error( 'parse_failed', __( 'No se pudo parsear el HTML del frontend.', 'wp-pin-freeze' ) );
+			return new WP_Error( 'parse_failed', __( 'No se pudo parsear el HTML del frontend.', 'pin-freeze' ) );
 		}
 
 		$xpath = new DOMXPath( $dom );
@@ -263,7 +263,7 @@ class WPPF_Ajax_Fetcher {
 				'selector_not_found',
 				sprintf(
 					/* translators: %s: selector */
-					__( 'No se encontró contenido para el selector "%s".', 'wp-pin-freeze' ),
+					__( 'No se encontró contenido para el selector "%s".', 'pin-freeze' ),
 					esc_html( $selector )
 				)
 			);
@@ -276,7 +276,7 @@ class WPPF_Ajax_Fetcher {
 
 		$html = trim( implode( "\n", $chunks ) );
 		if ( '' === $html ) {
-			return new WP_Error( 'selector_empty', __( 'El selector existe, pero su contenido está vacío.', 'wp-pin-freeze' ) );
+			return new WP_Error( 'selector_empty', __( 'El selector existe, pero su contenido está vacío.', 'pin-freeze' ) );
 		}
 
 		return $html;

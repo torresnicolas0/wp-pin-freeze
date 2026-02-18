@@ -3,7 +3,7 @@ Contributors: nicoto
 Donate link: https://github.com/sponsors/torresnicolas0
 Tags: gutenberg, blocks, html, caching, editor
 Requires at least: 5.2
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.2
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -12,7 +12,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Pin and freeze dynamic block output or full post/page content as editable static HTML.
 
 == Description ==
-WP Pin & Freeze lets administrators and editors freeze rendered HTML in two scopes:
+Pin & Freeze lets administrators and editors freeze rendered HTML in two scopes:
 
 1. Individual blocks (granular pinning).
 2. Entire posts/pages (global pinning).
@@ -30,7 +30,7 @@ Key features:
 - Capability-aware HTML sanitization (`unfiltered_html` respected).
 
 == Installation ==
-1. Upload the `wp-pin-freeze` folder to `/wp-content/plugins/`.
+1. Upload the `pin-freeze` folder to `/wp-content/plugins/`.
 2. Activate the plugin in WordPress admin.
 3. Open a post/page in the block editor.
 4. Use block inspector controls or the "Post Pinning" panel to pin/unpin HTML.

@@ -1,62 +1,62 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Pin & Freeze 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-pin-freeze\n"
+"Project-Id-Version: Pin & Freeze 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pin-freeze\n"
 "Last-Translator: Nicolás Torres <nicolas@example.com>\n"
-"Language-Team: English (United States)\n"
-"Language: en_US\n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2026-02-18 18:47:35+0000\n"
-"X-Generator: WP Pin & Freeze translation builder\n"
-"X-Domain: wp-pin-freeze\n"
+"X-Generator: Pin & Freeze translation builder\n"
+"X-Domain: pin-freeze\n"
 
 #. Plugin Name of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 #: includes/settings-page.php:39
 #: includes/settings-page.php:40
 #: includes/settings-page.php:147
 #: src/components/BlockPinControl.js:55
-msgid "WP Pin & Freeze"
-msgstr "WP Pin & Freeze"
+msgid "Pin & Freeze"
+msgstr "Pin & Freeze"
 
 #. Plugin URI of the plugin
-#: wp-pin-freeze.php
-msgid "https://github.com/torresnicolas0/wp-pin-freeze"
-msgstr "https://github.com/torresnicolas0/wp-pin-freeze"
+#: pin-freeze.php
+msgid "https://github.com/torresnicolas0/pin-freeze"
+msgstr "https://github.com/torresnicolas0/pin-freeze"
 
 #. Description of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 msgid "Pin and freeze rendered HTML for individual blocks or entire posts/pages."
-msgstr "Pin and freeze rendered HTML for individual blocks or entire posts/pages."
+msgstr "Pinea y congela el HTML renderizado para bloques individuales o entradas/páginas completas."
 
 #. Author of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 msgid "Nicolás Torres"
 msgstr "Nicolás Torres"
 
 #. Author URI of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 msgid "http://linkedin.com/in/torresnicolas/"
 msgstr "http://linkedin.com/in/torresnicolas/"
 
 #: includes/ajax-fetcher.php:46
 #: includes/history-manager.php:79
 msgid "ID de contenido inválido."
-msgstr "Invalid content ID."
+msgstr "ID de contenido inválido."
 
 #: includes/ajax-fetcher.php:55
 msgid "No tienes permisos para capturar este contenido."
-msgstr "You do not have permission to capture this content."
+msgstr "No tienes permisos para capturar este contenido."
 
 #: includes/ajax-fetcher.php:65
 msgid "No se pudo generar el permalink del contenido."
-msgstr "Could not generate the content permalink."
+msgstr "No se pudo generar el permalink del contenido."
 
 #: includes/ajax-fetcher.php:85
 msgid "La respuesta del frontend llegó vacía."
-msgstr "The frontend response was empty."
+msgstr "La respuesta del frontend llegó vacía."
 
 #. translators: %d: HTTP status code.
 #: includes/ajax-fetcher.php:162
@@ -67,291 +67,291 @@ msgstr "HTTP %d"
 
 #: includes/ajax-fetcher.php:166
 msgid "No se pudo construir URL de fallback local."
-msgstr "Could not build local fallback URL."
+msgstr "No se pudo construir URL de fallback local."
 
 #. translators: 1: primary error, 2: fallback error.
 #: includes/ajax-fetcher.php:181
 #, php-format
 msgid "No se pudo capturar el frontend. Remoto: %1$s. Fallback local: %2$s."
-msgstr "Could not capture the frontend. Remote: %1$s. Local fallback: %2$s."
+msgstr "No se pudo capturar el frontend. Remoto: %1$s. Fallback local: %2$s."
 
 #: includes/ajax-fetcher.php:233
 msgid "DOMDocument no está disponible en este servidor."
-msgstr "DOMDocument is not available on this server."
+msgstr "DOMDocument no está disponible en este servidor."
 
 #: includes/ajax-fetcher.php:245
 msgid "El selector configurado es inválido. Usa #id, .class o nombre de etiqueta."
-msgstr "The configured selector is invalid. Use #id, .class, or tag name."
+msgstr "El selector configurado es inválido. Usa #id, .class o nombre de etiqueta."
 
 #: includes/ajax-fetcher.php:256
 msgid "No se pudo parsear el HTML del frontend."
-msgstr "Could not parse the frontend HTML."
+msgstr "No se pudo parsear el HTML del frontend."
 
 #. translators: %s: selector
 #: includes/ajax-fetcher.php:266
 #, php-format
 msgid "No se encontró contenido para el selector \"%s\"."
-msgstr "No content found for selector \"%s\"."
+msgstr "No se encontró contenido para el selector \"%s\"."
 
 #: includes/ajax-fetcher.php:279
 msgid "El selector existe, pero su contenido está vacío."
-msgstr "The selector exists, but its content is empty."
+msgstr "El selector existe, pero su contenido está vacío."
 
 #: includes/history-manager.php:43
 msgid "Pin Snapshots"
-msgstr "Pin Snapshots"
+msgstr "Snapshots de pin"
 
 #: includes/history-manager.php:44
 msgid "Pin Snapshot"
-msgstr "Pin Snapshot"
+msgstr "Snapshot de pin"
 
 #: includes/history-manager.php:88
 msgid "No tienes permisos para pinear este contenido."
-msgstr "You do not have permission to pin this content."
+msgstr "No tienes permisos para pinear este contenido."
 
 #: includes/history-manager.php:119
 msgid "Pin actualizado sin crear snapshot."
-msgstr "Pin updated without creating a snapshot."
+msgstr "Pin actualizado sin crear snapshot."
 
 #: includes/history-manager.php:119
 msgid "Pin guardado y snapshot creado."
-msgstr "Pin saved and snapshot created."
+msgstr "Pin guardado y snapshot creado."
 
 #: includes/history-manager.php:147
 msgid "No se pudo crear el snapshot: contenido inválido."
-msgstr "Could not create snapshot: invalid content."
+msgstr "No se pudo crear el snapshot: contenido inválido."
 
 #. translators: 1: post title, 2: date
 #: includes/history-manager.php:152
 #, php-format
 msgid "Snapshot de %1$s - %2$s"
-msgstr "Snapshot of %1$s - %2$s"
+msgstr "Snapshot de %1$s - %2$s"
 
 #: includes/settings-page.php:65
 msgid "Frontend Capture"
-msgstr "Frontend Capture"
+msgstr "Captura de frontend"
 
 #: includes/settings-page.php:72
 msgid "Capture Selector"
-msgstr "Capture Selector"
+msgstr "Selector de captura"
 
 #: includes/settings-page.php:99
 msgid "Selector inválido. Usa un selector simple: #id, .class o nombre de etiqueta."
-msgstr "Invalid selector. Use a simple selector: #id, .class, or tag name."
+msgstr "Selector inválido. Usa un selector simple: #id, .class o nombre de etiqueta."
 
 #: includes/settings-page.php:111
 msgid "Define el selector CSS del frontend que contiene el contenido real de la página para capturar HTML sin header/footer."
-msgstr "Define the frontend CSS selector that contains the real page content to capture HTML without header/footer."
+msgstr "Define el selector CSS del frontend que contiene el contenido real de la página para capturar HTML sin header/footer."
 
 #: includes/settings-page.php:131
 msgid "Ejemplos: #content, .site-main, main"
-msgstr "Examples: #content, .site-main, main"
+msgstr "Ejemplos: #content, .site-main, main"
 
-#: wp-pin-freeze.php:223
+#: pin-freeze.php:223
 #: src/index.js:62
 msgid "Este bloque está pineado. ¿Deseas despinearlo para editar?"
-msgstr "This block is pinned. Do you want to unpin it to edit?"
+msgstr "Este bloque está pineado. ¿Deseas despinearlo para editar?"
 
-#: wp-pin-freeze.php:224
+#: pin-freeze.php:224
 #: src/index.js:106
 msgid "Esta entrada está pineada. ¿Deseas despinearla para editar?"
-msgstr "This post is pinned. Do you want to unpin it to edit?"
+msgstr "Esta entrada está pineada. ¿Deseas despinearla para editar?"
 
-#: wp-pin-freeze.php:348
-#: wp-pin-freeze.php:368
+#: pin-freeze.php:348
+#: pin-freeze.php:368
 msgid "Pineado"
-msgstr "Pinned"
+msgstr "Pineado"
 
-#: wp-pin-freeze.php:374
+#: pin-freeze.php:374
 msgid "Despinear"
-msgstr "Unpin"
+msgstr "Despinear"
 
-#: wp-pin-freeze.php:437
+#: pin-freeze.php:437
 msgid "Nonce inválido."
-msgstr "Invalid nonce."
+msgstr "Nonce inválido."
 
-#: wp-pin-freeze.php:441
+#: pin-freeze.php:441
 msgid "No tienes permisos para despinear este contenido."
-msgstr "You do not have permission to unpin this content."
+msgstr "No tienes permisos para despinear este contenido."
 
-#: wp-pin-freeze.php:475
+#: pin-freeze.php:475
 msgid "Contenido despineado correctamente."
-msgstr "Content unpinned successfully."
+msgstr "Contenido despineado correctamente."
 
 #: src/components/BlockPinControl.js:59
 msgid "Pin HTML"
-msgstr "Pin HTML"
+msgstr "Pinear HTML"
 
 #: src/components/BlockPinControl.js:62
 msgid "Este bloque está pineado y usa HTML estático."
-msgstr "This block is pinned and uses static HTML."
+msgstr "Este bloque está pineado y usa HTML estático."
 
 #: src/components/BlockPinControl.js:66
 msgid "Congela la salida del bloque para reemplazar su render dinámico."
-msgstr "Freeze the block output to replace its dynamic rendering."
+msgstr "Congela la salida del bloque para reemplazar su render dinámico."
 
 #: src/components/BlockPinControl.js:78
 msgid "HTML estático del bloque pineado:"
-msgstr "Static HTML of the pinned block:"
+msgstr "HTML estático del bloque pineado:"
 
 #: src/components/BlockPinControl.js:92
 msgid "Frozen HTML"
-msgstr "Frozen HTML"
+msgstr "HTML congelado"
 
 #: src/components/PinOverlay.js:33
 msgid "Este contenido está pineado."
-msgstr "This content is pinned."
+msgstr "Este contenido está pineado."
 
 #: src/components/PinOverlay.js:36
 msgid "Haz clic para despinearlo."
-msgstr "Click to unpin it."
+msgstr "Haz clic para despinearlo."
 
 #: src/components/PostPinPanel.js:33
-msgid "No se encontró la URL de AJAX para WP Pin & Freeze."
-msgstr "WP Pin & Freeze AJAX URL was not found."
+msgid "No se encontró la URL de AJAX para Pin & Freeze."
+msgstr "No se encontró la URL de AJAX para Pin & Freeze."
 
 #. translators: %d: HTTP status code
 #: src/components/PostPinPanel.js:60
 #, js-format
 msgid "Error de red al procesar la petición (%d)."
-msgstr "Network error while processing the request (%d)."
+msgstr "Error de red al procesar la petición (%d)."
 
 #: src/components/PostPinPanel.js:74
 msgid "La respuesta del servidor no es válida. Verifica si el sitio está en mantenimiento o inaccesible."
-msgstr "The server response is invalid. Check whether the site is in maintenance mode or unreachable."
+msgstr "La respuesta del servidor no es válida. Verifica si el sitio está en mantenimiento o inaccesible."
 
 #: src/components/PostPinPanel.js:83
 msgid "No se pudo completar la operación de pinning."
-msgstr "Could not complete the pinning operation."
+msgstr "No se pudo completar la operación de pinning."
 
 #: src/components/PostPinPanel.js:95
 msgid "Sin fecha"
-msgstr "No date"
+msgstr "Sin fecha"
 
 #: src/components/PostPinPanel.js:107
 msgid "Autor desconocido"
-msgstr "Unknown author"
+msgstr "Autor desconocido"
 
 #: src/components/PostPinPanel.js:201
 #: src/components/PostPinPanel.js:238
 #: src/components/PostPinPanel.js:293
 msgid "No se encontró el ID del contenido actual."
-msgstr "Current content ID was not found."
+msgstr "No se encontró el ID del contenido actual."
 
 #: src/components/PostPinPanel.js:218
 msgid "Contenido capturado desde frontend. Revísalo y guarda el pin."
-msgstr "Content captured from frontend. Review it and save the pin."
+msgstr "Contenido capturado desde frontend. Revísalo y guarda el pin."
 
 #: src/components/PostPinPanel.js:226
 msgid "Error al capturar frontend."
-msgstr "Error capturing frontend."
+msgstr "Error al capturar frontend."
 
 #: src/components/PostPinPanel.js:259
 msgid "No hay HTML para pinear."
-msgstr "There is no HTML to pin."
+msgstr "No hay HTML para pinear."
 
 #: src/components/PostPinPanel.js:276
 msgid "Pin guardado correctamente."
-msgstr "Pin saved successfully."
+msgstr "Pin guardado correctamente."
 
 #: src/components/PostPinPanel.js:281
 msgid "Error guardando el pin."
-msgstr "Error saving the pin."
+msgstr "Error guardando el pin."
 
 #: src/components/PostPinPanel.js:304
 msgid "El snapshot seleccionado no contiene HTML utilizable."
-msgstr "The selected snapshot does not contain usable HTML."
+msgstr "El snapshot seleccionado no contiene HTML utilizable."
 
 #: src/components/PostPinPanel.js:325
 msgid "Snapshot restaurado y meta actualizada correctamente."
-msgstr "Snapshot restored and meta updated successfully."
+msgstr "Snapshot restaurado y meta actualizada correctamente."
 
 #: src/components/PostPinPanel.js:333
 msgid "No se pudo restaurar el snapshot."
-msgstr "Could not restore the snapshot."
+msgstr "No se pudo restaurar el snapshot."
 
 #: src/components/PostPinPanel.js:343
 msgid "Post Pinning"
-msgstr "Post Pinning"
+msgstr "Pineado de entrada"
 
 #: src/components/PostPinPanel.js:347
 msgid "Pin complete post HTML"
-msgstr "Pin complete post HTML"
+msgstr "Pinear HTML completo de la entrada"
 
 #: src/components/PostPinPanel.js:350
 msgid "El frontend mostrará el HTML estático guardado en meta."
-msgstr "Frontend will display the static HTML saved in meta."
+msgstr "El frontend mostrará el HTML estático guardado en meta."
 
 #: src/components/PostPinPanel.js:354
 msgid "Permite reemplazar todo el contenido de frontend por HTML estático."
-msgstr "Replace all frontend content with static HTML."
+msgstr "Permite reemplazar todo el contenido de frontend por HTML estático."
 
 #: src/components/PostPinPanel.js:365
 msgid "La edición visual queda bloqueada mientras esta entrada/página esté pineada."
-msgstr "Visual editing is locked while this post/page is pinned."
+msgstr "La edición visual queda bloqueada mientras esta entrada/página esté pineada."
 
 #: src/components/PostPinPanel.js:374
 msgid "Tu rol no tiene unfiltered_html. El HTML se sanitizará automáticamente al guardar y renderizar."
-msgstr "Your role does not have unfiltered_html. HTML will be sanitized automatically when saving and rendering."
+msgstr "Tu rol no tiene unfiltered_html. El HTML se sanitizará automáticamente al guardar y renderizar."
 
 #: src/components/PostPinPanel.js:406
 msgid "Capture"
-msgstr "Capture"
+msgstr "Captura"
 
 #: src/components/PostPinPanel.js:410
 msgid "Pin History"
-msgstr "Pin History"
+msgstr "Historial de pines"
 
 #: src/components/PostPinPanel.js:427
 msgid "No hay snapshots todavía para esta entrada."
-msgstr "There are no snapshots for this post yet."
+msgstr "No hay snapshots todavía para esta entrada."
 
 #: src/components/PostPinPanel.js:465
 msgid "Restaurar"
-msgstr "Restore"
+msgstr "Restaurar"
 
 #: src/components/PostPinPanel.js:479
 msgid "Modo de Captura"
-msgstr "Capture Mode"
+msgstr "Modo de Captura"
 
 #: src/components/PostPinPanel.js:487
 msgid "Editor State"
-msgstr "Editor State"
+msgstr "Estado del editor"
 
 #: src/components/PostPinPanel.js:494
 msgid "Live Frontend"
-msgstr "Live Frontend"
+msgstr "Frontend en vivo"
 
 #. translators: %s: CSS selector
 #: src/components/PostPinPanel.js:507
 #, js-format
 msgid "Selector configurado: %s"
-msgstr "Configured selector: %s"
+msgstr "Selector configurado: %s"
 
 #: src/components/PostPinPanel.js:526
 msgid "Capturando…"
-msgstr "Capturing..."
+msgstr "Capturando…"
 
 #: src/components/PostPinPanel.js:530
 msgid "Fetch & Pin URL"
-msgstr "Fetch & Pin URL"
+msgstr "Capturar y pinear URL"
 
 #: src/components/PostPinPanel.js:543
 msgid "Guardando…"
-msgstr "Saving..."
+msgstr "Guardando…"
 
 #: src/components/PostPinPanel.js:544
 msgid "Pin HTML (Guardar)"
-msgstr "Pin HTML (Save)"
+msgstr "Pinear HTML (Guardar)"
 
 #: src/components/PostPinPanel.js:560
 msgid "Post Frozen HTML"
-msgstr "Post Frozen HTML"
+msgstr "HTML congelado de la entrada"
 
 #: src/index.js:77
 msgid "Bloque pineado"
-msgstr "Pinned block"
+msgstr "Bloque pineado"
 
 #: src/index.js:120
 msgid "Entrada/Página pineada"
-msgstr "Pinned post/page"
+msgstr "Entrada/Página pineada"

@@ -30,10 +30,10 @@ function PinOverlay( { className = '', label = '', onRequestUnpin } ) {
 			<span className="dashicons dashicons-lock" aria-hidden="true" />
 			<span className="wppf-pin-overlay__title">
 				{ label ||
-					__( 'Este contenido está pineado.', 'wp-pin-freeze' ) }
+					__( 'Este contenido está pineado.', 'pin-freeze' ) }
 			</span>
 			<span className="wppf-pin-overlay__subtitle">
-				{ __( 'Haz clic para despinearlo.', 'wp-pin-freeze' ) }
+				{ __( 'Haz clic para despinearlo.', 'pin-freeze' ) }
 			</span>
 		</div>
 	);

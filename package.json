@@ -1,5 +1,5 @@
 {
-  "name": "wp-pin-freeze",
+  "name": "pin-freeze",
   "version": "1.0.0",
   "description": "Pin and freeze rendered HTML for Gutenberg blocks and full posts/pages.",
   "license": "GPL-2.0-or-later",
@@ -7,7 +7,8 @@
   "scripts": {
     "start": "wp-scripts start --webpack-copy-php",
     "build": "wp-scripts build --webpack-copy-php",
-    "lint:js": "wp-scripts lint-js src"
+    "lint:js": "wp-scripts lint-js src",
+    "package:wporg": "bash scripts/package.sh"
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.23.0"

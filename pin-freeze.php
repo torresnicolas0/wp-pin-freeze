@@ -7,10 +7,10 @@
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Nicolás Torres
- * Author URI:        http://linkedin.com/in/torresnicolas/
+ * Author URI:        https://linkedin.com/in/torresnicolas/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       wp-pin-freeze
+ * Text Domain:       pin-freeze
  * Domain Path:       /languages
  */
 
@@ -125,7 +125,7 @@ function wppf_requirements_notice() {
 		esc_html(
 			sprintf(
 				/* translators: 1: required WordPress version, 2: required PHP version, 3: current WordPress version, 4: current PHP version */
-				__( 'WP Pin & Freeze requiere WordPress %1$s o superior y PHP %2$s o superior. Versiones actuales: WordPress %3$s, PHP %4$s.', 'wp-pin-freeze' ),
+				__( 'Pin & Freeze requiere WordPress %1$s o superior y PHP %2$s o superior. Versiones actuales: WordPress %3$s, PHP %4$s.', 'pin-freeze' ),
 				WPPF_MIN_WP_VERSION,
 				WPPF_MIN_PHP_VERSION,
 				$wp_version,
@@ -193,7 +193,7 @@ class WPPF_Plugin {
 	 * @return void
 	 */
 	public static function load_textdomain() {
-		load_plugin_textdomain( 'wp-pin-freeze', false, dirname( plugin_basename( WPPF_PLUGIN_FILE ) ) . '/languages' );
+		load_plugin_textdomain( 'pin-freeze', false, dirname( plugin_basename( WPPF_PLUGIN_FILE ) ) . '/languages' );
 	}
 
 	/**
@@ -358,8 +358,8 @@ class WPPF_Plugin {
 			'wppfEditorSettings',
 			array(
 				'canUnfilteredHtml' => current_user_can( 'unfiltered_html' ),
-				'blockUnpinConfirm' => __( 'Este bloque está pineado. ¿Deseas despinearlo para editar?', 'wp-pin-freeze' ),
-				'postUnpinConfirm'  => __( 'Esta entrada está pineada. ¿Deseas despinearla para editar?', 'wp-pin-freeze' ),
+				'blockUnpinConfirm' => __( 'Este bloque está pineado. ¿Deseas despinearlo para editar?', 'pin-freeze' ),
+				'postUnpinConfirm'  => __( 'Esta entrada está pineada. ¿Deseas despinearla para editar?', 'pin-freeze' ),
 				'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
 				'nonce'             => wp_create_nonce( 'wppf_editor_nonce' ),
 				'captureSelector'   => class_exists( 'WPPF_Settings_Page' ) ? WPPF_Settings_Page::get_capture_selector() : '#content',
@@ -368,7 +368,7 @@ class WPPF_Plugin {
 		);
 
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'wppf-editor-script', 'wp-pin-freeze', WPPF_PLUGIN_DIR . 'languages' );
+			wp_set_script_translations( 'wppf-editor-script', 'pin-freeze', WPPF_PLUGIN_DIR . 'languages' );
 		}
 	}
 
@@ -483,7 +483,7 @@ class WPPF_Plugin {
 
 		$states['wppf_pinned'] = sprintf(
 			'<span class="wppf-post-state"><span class="dashicons dashicons-pin" aria-hidden="true"></span>%s</span>',
-			esc_html__( 'Pineado', 'wp-pin-freeze' )
+			esc_html__( 'Pineado', 'pin-freeze' )
 		);
 
 		return $states;
@@ -503,13 +503,13 @@ class WPPF_Plugin {
 
 		$actions['wppf_pinned'] = sprintf(
 			'<span class="wppf-pinned-row-action"><span class="dashicons dashicons-pin" aria-hidden="true"></span>%s</span>',
-			esc_html__( 'Pineado', 'wp-pin-freeze' )
+			esc_html__( 'Pineado', 'pin-freeze' )
 		);
 
 		$actions['wppf_unpin'] = sprintf(
 			'<a href="%1$s">%2$s</a>',
 			esc_url( self::get_unpin_url( $post ) ),
-			esc_html__( 'Despinear', 'wp-pin-freeze' )
+			esc_html__( 'Despinear', 'pin-freeze' )
 		);
 
 		return $actions;
@@ -572,11 +572,11 @@ class WPPF_Plugin {
 
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'wppf_unpin_post_' . $post_id ) ) {
-			wp_die( esc_html__( 'Nonce inválido.', 'wp-pin-freeze' ) );
+			wp_die( esc_html__( 'Nonce inválido.', 'pin-freeze' ) );
 		}
 
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			wp_die( esc_html__( 'No tienes permisos para despinear este contenido.', 'wp-pin-freeze' ) );
+			wp_die( esc_html__( 'No tienes permisos para despinear este contenido.', 'pin-freeze' ) );
 		}
 
 		update_post_meta( $post_id, self::META_POST_PINNED, false );
@@ -610,7 +610,7 @@ class WPPF_Plugin {
 			return;
 		}
 
-		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Contenido despineado correctamente.', 'wp-pin-freeze' ) . '</p></div>';
+		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Contenido despineado correctamente.', 'pin-freeze' ) . '</p></div>';
 	}
 
 	/**

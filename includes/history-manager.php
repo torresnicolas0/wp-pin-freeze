@@ -40,8 +40,8 @@ class WPPF_History_Manager {
 			self::POST_TYPE,
 			array(
 				'labels' => array(
-					'name'          => __( 'Pin Snapshots', 'wp-pin-freeze' ),
-					'singular_name' => __( 'Pin Snapshot', 'wp-pin-freeze' ),
+					'name'          => __( 'Pin Snapshots', 'pin-freeze' ),
+					'singular_name' => __( 'Pin Snapshot', 'pin-freeze' ),
 				),
 				'public'             => false,
 				'publicly_queryable' => false,
@@ -76,7 +76,7 @@ class WPPF_History_Manager {
 		if ( ! $post_id ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'ID de contenido inválido.', 'wp-pin-freeze' ),
+					'message' => __( 'ID de contenido inválido.', 'pin-freeze' ),
 				),
 				400
 			);
@@ -85,7 +85,7 @@ class WPPF_History_Manager {
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'No tienes permisos para pinear este contenido.', 'wp-pin-freeze' ),
+					'message' => __( 'No tienes permisos para pinear este contenido.', 'pin-freeze' ),
 				),
 				403
 			);
@@ -116,7 +116,7 @@ class WPPF_History_Manager {
 
 		wp_send_json_success(
 			array(
-				'message'     => $skip_snapshot ? __( 'Pin actualizado sin crear snapshot.', 'wp-pin-freeze' ) : __( 'Pin guardado y snapshot creado.', 'wp-pin-freeze' ),
+				'message'     => $skip_snapshot ? __( 'Pin actualizado sin crear snapshot.', 'pin-freeze' ) : __( 'Pin guardado y snapshot creado.', 'pin-freeze' ),
 				'post_id'     => $post_id,
 				'is_pinned'   => $is_pinned,
 				'html'        => $html,
@@ -144,12 +144,12 @@ class WPPF_History_Manager {
 		$html      = (string) $html;
 
 		if ( ! $post_id ) {
-			return new WP_Error( 'invalid_post', __( 'No se pudo crear el snapshot: contenido inválido.', 'wp-pin-freeze' ) );
+			return new WP_Error( 'invalid_post', __( 'No se pudo crear el snapshot: contenido inválido.', 'pin-freeze' ) );
 		}
 
 		$title = sprintf(
 			/* translators: 1: post title, 2: date */
-			__( 'Snapshot de %1$s - %2$s', 'wp-pin-freeze' ),
+			__( 'Snapshot de %1$s - %2$s', 'pin-freeze' ),
 			get_the_title( $post_id ),
 			wppf_wp_date( 'Y-m-d H:i:s' )
 		);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Settings page for WP Pin & Freeze.
+ * Settings page for Pin & Freeze.
  *
  * @package WP_Pin_Freeze
  */
@@ -36,10 +36,10 @@ class WPPF_Settings_Page {
 	 */
 	public static function register_settings_page() {
 		add_options_page(
-			__( 'WP Pin & Freeze', 'wp-pin-freeze' ),
-			__( 'WP Pin & Freeze', 'wp-pin-freeze' ),
+			__( 'Pin & Freeze', 'pin-freeze' ),
+			__( 'Pin & Freeze', 'pin-freeze' ),
 			'manage_options',
-			'wp-pin-freeze',
+			'pin-freeze',
 			array( __CLASS__, 'render_page' )
 		);
 	}
@@ -62,16 +62,16 @@ class WPPF_Settings_Page {
 
 		add_settings_section(
 			'wppf_capture_section',
-			__( 'Frontend Capture', 'wp-pin-freeze' ),
+			__( 'Frontend Capture', 'pin-freeze' ),
 			array( __CLASS__, 'render_section_description' ),
-			'wp-pin-freeze'
+			'pin-freeze'
 		);
 
 		add_settings_field(
 			self::OPTION_CAPTURE_SELECTOR,
-			__( 'Capture Selector', 'wp-pin-freeze' ),
+			__( 'Capture Selector', 'pin-freeze' ),
 			array( __CLASS__, 'render_capture_selector_field' ),
-			'wp-pin-freeze',
+			'pin-freeze',
 			'wppf_capture_section'
 		);
 	}
@@ -96,7 +96,7 @@ class WPPF_Settings_Page {
 		add_settings_error(
 			self::OPTION_CAPTURE_SELECTOR,
 			'invalid_selector',
-			__( 'Selector inválido. Usa un selector simple: #id, .class o nombre de etiqueta.', 'wp-pin-freeze' )
+			__( 'Selector inválido. Usa un selector simple: #id, .class o nombre de etiqueta.', 'pin-freeze' )
 		);
 
 		return '#content';
@@ -108,7 +108,7 @@ class WPPF_Settings_Page {
 	 * @return void
 	 */
 	public static function render_section_description() {
-		echo '<p>' . esc_html__( 'Define el selector CSS del frontend que contiene el contenido real de la página para capturar HTML sin header/footer.', 'wp-pin-freeze' ) . '</p>';
+		echo '<p>' . esc_html__( 'Define el selector CSS del frontend que contiene el contenido real de la página para capturar HTML sin header/footer.', 'pin-freeze' ) . '</p>';
 	}
 
 	/**
@@ -128,7 +128,7 @@ class WPPF_Settings_Page {
 			value="<?php echo esc_attr( $value ); ?>"
 		/>
 		<p class="description">
-			<?php esc_html_e( 'Ejemplos: #content, .site-main, main', 'wp-pin-freeze' ); ?>
+			<?php esc_html_e( 'Ejemplos: #content, .site-main, main', 'pin-freeze' ); ?>
 		</p>
 		<?php
 	}
@@ -144,11 +144,11 @@ class WPPF_Settings_Page {
 		}
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'WP Pin & Freeze', 'wp-pin-freeze' ); ?></h1>
+			<h1><?php esc_html_e( 'Pin & Freeze', 'pin-freeze' ); ?></h1>
 			<form method="post" action="options.php">
 				<?php
 				settings_fields( 'wppf_settings' );
-				do_settings_sections( 'wp-pin-freeze' );
+				do_settings_sections( 'pin-freeze' );
 				submit_button();
 				?>
 			</form>

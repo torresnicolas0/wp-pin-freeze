@@ -31,8 +31,8 @@ async function requestWppfAjax( action, payload ) {
 	if ( ! ajaxUrl ) {
 		throw new Error(
 			__(
-				'No se encontró la URL de AJAX para WP Pin & Freeze.',
-				'wp-pin-freeze'
+				'No se encontró la URL de AJAX para Pin & Freeze.',
+				'pin-freeze'
 			)
 		);
 	}
@@ -59,7 +59,7 @@ async function requestWppfAjax( action, payload ) {
 				/* translators: %d: HTTP status code */
 				__(
 					'Error de red al procesar la petición (%d).',
-					'wp-pin-freeze'
+					'pin-freeze'
 				),
 				response.status
 			)
@@ -73,7 +73,7 @@ async function requestWppfAjax( action, payload ) {
 		throw new Error(
 			__(
 				'La respuesta del servidor no es válida. Verifica si el sitio está en mantenimiento o inaccesible.',
-				'wp-pin-freeze'
+				'pin-freeze'
 			)
 		);
 	}
@@ -82,7 +82,7 @@ async function requestWppfAjax( action, payload ) {
 			json?.data?.message ||
 				__(
 					'No se pudo completar la operación de pinning.',
-					'wp-pin-freeze'
+					'pin-freeze'
 				)
 		);
 	}
@@ -92,7 +92,7 @@ async function requestWppfAjax( action, payload ) {
 
 function formatSnapshotDate( dateValue ) {
 	if ( ! dateValue ) {
-		return __( 'Sin fecha', 'wp-pin-freeze' );
+		return __( 'Sin fecha', 'pin-freeze' );
 	}
 
 	return dateI18n( 'Y-m-d H:i', dateValue );
@@ -104,7 +104,7 @@ function getSnapshotAuthorName( snapshot ) {
 		return embeddedAuthor;
 	}
 
-	return __( 'Autor desconocido', 'wp-pin-freeze' );
+	return __( 'Autor desconocido', 'pin-freeze' );
 }
 
 function getSnapshotHtml( snapshot ) {
@@ -200,7 +200,7 @@ function PostPinPanel() {
 			setErrorMessage(
 				__(
 					'No se encontró el ID del contenido actual.',
-					'wp-pin-freeze'
+					'pin-freeze'
 				)
 			);
 			return;
@@ -217,13 +217,13 @@ function PostPinPanel() {
 			setSuccessMessage(
 				__(
 					'Contenido capturado desde frontend. Revísalo y guarda el pin.',
-					'wp-pin-freeze'
+					'pin-freeze'
 				)
 			);
 		} catch ( error ) {
 			setErrorMessage(
 				error?.message ||
-					__( 'Error al capturar frontend.', 'wp-pin-freeze' )
+					__( 'Error al capturar frontend.', 'pin-freeze' )
 			);
 		} finally {
 			setIsFetchingLive( false );
@@ -237,7 +237,7 @@ function PostPinPanel() {
 			setErrorMessage(
 				__(
 					'No se encontró el ID del contenido actual.',
-					'wp-pin-freeze'
+					'pin-freeze'
 				)
 			);
 			return;
@@ -256,7 +256,7 @@ function PostPinPanel() {
 
 			if ( ! htmlToSave.trim() ) {
 				throw new Error(
-					__( 'No hay HTML para pinear.', 'wp-pin-freeze' )
+					__( 'No hay HTML para pinear.', 'pin-freeze' )
 				);
 			}
 
@@ -273,12 +273,12 @@ function PostPinPanel() {
 			setPinned( true );
 			setSuccessMessage(
 				data?.message ||
-					__( 'Pin guardado correctamente.', 'wp-pin-freeze' )
+					__( 'Pin guardado correctamente.', 'pin-freeze' )
 			);
 		} catch ( error ) {
 			setErrorMessage(
 				error?.message ||
-					__( 'Error guardando el pin.', 'wp-pin-freeze' )
+					__( 'Error guardando el pin.', 'pin-freeze' )
 			);
 		} finally {
 			setIsSavingPin( false );
@@ -292,7 +292,7 @@ function PostPinPanel() {
 			setErrorMessage(
 				__(
 					'No se encontró el ID del contenido actual.',
-					'wp-pin-freeze'
+					'pin-freeze'
 				)
 			);
 			return;
@@ -303,7 +303,7 @@ function PostPinPanel() {
 			setErrorMessage(
 				__(
 					'El snapshot seleccionado no contiene HTML utilizable.',
-					'wp-pin-freeze'
+					'pin-freeze'
 				)
 			);
 			return;
@@ -324,13 +324,13 @@ function PostPinPanel() {
 			setSuccessMessage(
 				__(
 					'Snapshot restaurado y meta actualizada correctamente.',
-					'wp-pin-freeze'
+					'pin-freeze'
 				)
 			);
 		} catch ( error ) {
 			setErrorMessage(
 				error?.message ||
-					__( 'No se pudo restaurar el snapshot.', 'wp-pin-freeze' )
+					__( 'No se pudo restaurar el snapshot.', 'pin-freeze' )
 			);
 		} finally {
 			setIsRestoringSnapshot( false );
@@ -340,20 +340,20 @@ function PostPinPanel() {
 	return (
 		<PluginDocumentSettingPanel
 			name="wppf-post-pinning"
-			title={ __( 'Post Pinning', 'wp-pin-freeze' ) }
+			title={ __( 'Post Pinning', 'pin-freeze' ) }
 			className="wppf-post-panel"
 		>
 			<ToggleControl
-				label={ __( 'Pin complete post HTML', 'wp-pin-freeze' ) }
+				label={ __( 'Pin complete post HTML', 'pin-freeze' ) }
 				help={
 					isPinned
 						? __(
 								'El frontend mostrará el HTML estático guardado en meta.',
-								'wp-pin-freeze'
+								'pin-freeze'
 						  )
 						: __(
 								'Permite reemplazar todo el contenido de frontend por HTML estático.',
-								'wp-pin-freeze'
+								'pin-freeze'
 						  )
 				}
 				checked={ isPinned }
@@ -364,7 +364,7 @@ function PostPinPanel() {
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
 						'La edición visual queda bloqueada mientras esta entrada/página esté pineada.',
-						'wp-pin-freeze'
+						'pin-freeze'
 					) }
 				</Notice>
 			) }
@@ -373,7 +373,7 @@ function PostPinPanel() {
 				<Notice status="info" isDismissible={ false }>
 					{ __(
 						'Tu rol no tiene unfiltered_html. El HTML se sanitizará automáticamente al guardar y renderizar.',
-						'wp-pin-freeze'
+						'pin-freeze'
 					) }
 				</Notice>
 			) }
@@ -403,11 +403,11 @@ function PostPinPanel() {
 				tabs={ [
 					{
 						name: 'capture',
-						title: __( 'Capture', 'wp-pin-freeze' ),
+						title: __( 'Capture', 'pin-freeze' ),
 					},
 					{
 						name: 'history',
-						title: __( 'Pin History', 'wp-pin-freeze' ),
+						title: __( 'Pin History', 'pin-freeze' ),
 					},
 				] }
 			>
@@ -426,7 +426,7 @@ function PostPinPanel() {
 								<p className="wppf-history-empty">
 									{ __(
 										'No hay snapshots todavía para esta entrada.',
-										'wp-pin-freeze'
+										'pin-freeze'
 									) }
 								</p>
 							);
@@ -464,7 +464,7 @@ function PostPinPanel() {
 										>
 											{ __(
 												'Restaurar',
-												'wp-pin-freeze'
+												'pin-freeze'
 											) }
 										</Button>
 									</li>
@@ -478,7 +478,7 @@ function PostPinPanel() {
 							<SelectControl
 								label={ __(
 									'Modo de Captura',
-									'wp-pin-freeze'
+									'pin-freeze'
 								) }
 								value={ captureMode }
 								onChange={ setCaptureMode }
@@ -486,14 +486,14 @@ function PostPinPanel() {
 									{
 										label: __(
 											'Editor State',
-											'wp-pin-freeze'
+											'pin-freeze'
 										),
 										value: 'editor',
 									},
 									{
 										label: __(
 											'Live Frontend',
-											'wp-pin-freeze'
+											'pin-freeze'
 										),
 										value: 'live',
 									},
@@ -506,7 +506,7 @@ function PostPinPanel() {
 										/* translators: %s: CSS selector */
 										__(
 											'Selector configurado: %s',
-											'wp-pin-freeze'
+											'pin-freeze'
 										),
 										captureSelector
 									) }
@@ -525,11 +525,11 @@ function PostPinPanel() {
 										{ isFetchingLive
 											? __(
 													'Capturando…',
-													'wp-pin-freeze'
+													'pin-freeze'
 											  )
 											: __(
 													'Fetch & Pin URL',
-													'wp-pin-freeze'
+													'pin-freeze'
 											  ) }
 									</Button>
 								) }
@@ -540,10 +540,10 @@ function PostPinPanel() {
 									disabled={ isSavingPin || isFetchingLive }
 								>
 									{ isSavingPin
-										? __( 'Guardando…', 'wp-pin-freeze' )
+										? __( 'Guardando…', 'pin-freeze' )
 										: __(
 												'Pin HTML (Guardar)',
-												'wp-pin-freeze'
+												'pin-freeze'
 										  ) }
 								</Button>
 							</div>
@@ -559,7 +559,7 @@ function PostPinPanel() {
 								<TextareaControl
 									label={ __(
 										'Post Frozen HTML',
-										'wp-pin-freeze'
+										'pin-freeze'
 									) }
 									value={ html }
 									onChange={ setHtml }

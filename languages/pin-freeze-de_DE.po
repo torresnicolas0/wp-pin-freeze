@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Pin & Freeze 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-pin-freeze\n"
+"Project-Id-Version: Pin & Freeze 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pin-freeze\n"
 "Last-Translator: Nicolás Torres <nicolas@example.com>\n"
 "Language-Team: German (Germany)\n"
 "Language: de_DE\n"
@@ -9,35 +9,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2026-02-18 18:47:58+0000\n"
-"X-Generator: WP Pin & Freeze translation builder\n"
-"X-Domain: wp-pin-freeze\n"
+"X-Generator: Pin & Freeze translation builder\n"
+"X-Domain: pin-freeze\n"
 
 #. Plugin Name of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 #: includes/settings-page.php:39
 #: includes/settings-page.php:40
 #: includes/settings-page.php:147
 #: src/components/BlockPinControl.js:55
-msgid "WP Pin & Freeze"
-msgstr "WP Pin & Freeze"
+msgid "Pin & Freeze"
+msgstr "Pin & Freeze"
 
 #. Plugin URI of the plugin
-#: wp-pin-freeze.php
-msgid "https://github.com/torresnicolas0/wp-pin-freeze"
-msgstr "https://github.com/torresnicolas0/wp-pin-freeze"
+#: pin-freeze.php
+msgid "https://github.com/torresnicolas0/pin-freeze"
+msgstr "https://github.com/torresnicolas0/pin-freeze"
 
 #. Description of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 msgid "Pin and freeze rendered HTML for individual blocks or entire posts/pages."
 msgstr "Anheften und Einfrieren von gerendertem HTML für einzelne Blöcke oder ganze Beiträge/Seiten."
 
 #. Author of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 msgid "Nicolás Torres"
 msgstr "Nicolás Torres"
 
 #. Author URI of the plugin
-#: wp-pin-freeze.php
+#: pin-freeze.php
 msgid "http://linkedin.com/in/torresnicolas/"
 msgstr "http://linkedin.com/in/torresnicolas/"
 
@@ -147,34 +147,34 @@ msgstr "Definieren Sie den Frontend-CSS-Selektor, der den echten Seiteninhalt en
 msgid "Ejemplos: #content, .site-main, main"
 msgstr "Beispiele: #content, .site-main, main"
 
-#: wp-pin-freeze.php:223
+#: pin-freeze.php:223
 #: src/index.js:62
 msgid "Este bloque está pineado. ¿Deseas despinearlo para editar?"
 msgstr "Dieser Block ist angepinnt. Möchten Sie es zum Bearbeiten lösen?"
 
-#: wp-pin-freeze.php:224
+#: pin-freeze.php:224
 #: src/index.js:106
 msgid "Esta entrada está pineada. ¿Deseas despinearla para editar?"
 msgstr "Dieser Beitrag ist angepinnt. Möchten Sie es zum Bearbeiten lösen?"
 
-#: wp-pin-freeze.php:348
-#: wp-pin-freeze.php:368
+#: pin-freeze.php:348
+#: pin-freeze.php:368
 msgid "Pineado"
 msgstr "Angepinnt"
 
-#: wp-pin-freeze.php:374
+#: pin-freeze.php:374
 msgid "Despinear"
 msgstr "Lösen"
 
-#: wp-pin-freeze.php:437
+#: pin-freeze.php:437
 msgid "Nonce inválido."
 msgstr "Ungültige Nonce."
 
-#: wp-pin-freeze.php:441
+#: pin-freeze.php:441
 msgid "No tienes permisos para despinear este contenido."
 msgstr "Sie haben keine Berechtigung, diesen Inhalt zu lösen."
 
-#: wp-pin-freeze.php:475
+#: pin-freeze.php:475
 msgid "Contenido despineado correctamente."
 msgstr "Der Inhalt wurde erfolgreich gelöst."
 
@@ -207,8 +207,8 @@ msgid "Haz clic para despinearlo."
 msgstr "Klicken Sie, um es zu lösen."
 
 #: src/components/PostPinPanel.js:33
-msgid "No se encontró la URL de AJAX para WP Pin & Freeze."
-msgstr "WP Pin & Freeze AJAX-URL wurde nicht gefunden."
+msgid "No se encontró la URL de AJAX para Pin & Freeze."
+msgstr "Pin & Freeze AJAX-URL wurde nicht gefunden."
 
 #. translators: %d: HTTP status code
 #: src/components/PostPinPanel.js:60

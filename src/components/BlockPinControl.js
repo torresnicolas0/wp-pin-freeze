@@ -52,20 +52,20 @@ function BlockPinControl( {
 	return (
 		<InspectorControls>
 			<PanelBody
-				title={ __( 'WP Pin & Freeze', 'wp-pin-freeze' ) }
+				title={ __( 'Pin & Freeze', 'pin-freeze' ) }
 				initialOpen
 			>
 				<ToggleControl
-					label={ __( 'Pin HTML', 'wp-pin-freeze' ) }
+					label={ __( 'Pin HTML', 'pin-freeze' ) }
 					help={
 						isPinned
 							? __(
 									'Este bloque está pineado y usa HTML estático.',
-									'wp-pin-freeze'
+									'pin-freeze'
 							  )
 							: __(
 									'Congela la salida del bloque para reemplazar su render dinámico.',
-									'wp-pin-freeze'
+									'pin-freeze'
 							  )
 					}
 					checked={ isPinned }
@@ -77,7 +77,7 @@ function BlockPinControl( {
 						<p className="wppf-inspector-help">
 							{ __(
 								'HTML estático del bloque pineado:',
-								'wp-pin-freeze'
+								'pin-freeze'
 							) }
 						</p>
 						{ CodeEditor ? (
@@ -89,7 +89,7 @@ function BlockPinControl( {
 							/>
 						) : (
 							<TextareaControl
-								label={ __( 'Frozen HTML', 'wp-pin-freeze' ) }
+								label={ __( 'Frozen HTML', 'pin-freeze' ) }
 								value={ pinnedHtml }
 								onChange={ onChangeHtml }
 								rows={ 12 }

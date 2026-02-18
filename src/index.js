@@ -61,7 +61,7 @@ const withPinOverlay = createHigherOrderComponent(
 				window?.wppfEditorSettings?.blockUnpinConfirm ||
 				__(
 					'Este bloque está pineado. ¿Deseas despinearlo para editar?',
-					'wp-pin-freeze'
+					'pin-freeze'
 				);
 
 			// eslint-disable-next-line no-alert
@@ -74,7 +74,7 @@ const withPinOverlay = createHigherOrderComponent(
 			<div className="wppf-block-lock-wrapper">
 				<BlockListBlock { ...props } />
 				<PinOverlay
-					label={ __( 'Bloque pineado', 'wp-pin-freeze' ) }
+					label={ __( 'Bloque pineado', 'pin-freeze' ) }
 					onRequestUnpin={ onRequestUnpin }
 				/>
 			</div>
@@ -105,7 +105,7 @@ function PostFreezeOverlay() {
 			window?.wppfEditorSettings?.postUnpinConfirm ||
 			__(
 				'Esta entrada está pineada. ¿Deseas despinearla para editar?',
-				'wp-pin-freeze'
+				'pin-freeze'
 			);
 
 		// eslint-disable-next-line no-alert
@@ -117,7 +117,7 @@ function PostFreezeOverlay() {
 	return createPortal(
 		<PinOverlay
 			className="wppf-pin-overlay--post"
-			label={ __( 'Entrada/Página pineada', 'wp-pin-freeze' ) }
+			label={ __( 'Entrada/Página pineada', 'pin-freeze' ) }
 			onRequestUnpin={ onRequestUnpin }
 		/>,
 		target
@@ -135,20 +135,20 @@ function WPPFDocumentPlugin() {
 
 addFilter(
 	'blocks.registerBlockType',
-	'wp-pin-freeze/add-attributes',
+	'pin-freeze/add-attributes',
 	addPinAttributes
 );
 addFilter(
 	'editor.BlockEdit',
-	'wp-pin-freeze/block-pin-control',
+	'pin-freeze/block-pin-control',
 	withBlockPinControl
 );
 addFilter(
 	'editor.BlockListBlock',
-	'wp-pin-freeze/block-pin-overlay',
+	'pin-freeze/block-pin-overlay',
 	withPinOverlay
 );
 
-registerPlugin( 'wp-pin-freeze-document-plugin', {
+registerPlugin( 'pin-freeze-document-plugin', {
 	render: WPPFDocumentPlugin,
 } );
