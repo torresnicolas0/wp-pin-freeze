@@ -1,5 +1,5 @@
-=== WP Pin & Freeze ===
-Contributors: torresnicolas
+=== Pin & Freeze ===
+Donate link: https://github.com/sponsors/torresnicolas0
 Tags: gutenberg, blocks, html, caching, editor
 Requires at least: 5.2
 Tested up to: 6.7
@@ -43,6 +43,15 @@ On `Posts` or `Pages` list, use the "Despinear" row action shown for pinned cont
 
 = Does this work for custom post types? =
 Yes, for public post types registered with `show_in_rest` enabled.
+
+== Screenshots ==
+1. Block inspector panel with Pin HTML controls.
+2. Document sidebar panel with Capture and History tabs.
+3. Admin posts list showing pinned state and violet title style.
+
+== Upgrade Notice ==
+= 1.0.0 =
+Initial public release.
 
 == Changelog ==
 = 1.0.0 =

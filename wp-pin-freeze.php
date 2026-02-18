@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       WP Pin & Freeze
+ * Plugin Name:       Pin & Freeze
  * Plugin URI:        https://github.com/torresnicolas0/wp-pin-freeze
  * Description:       Pin and freeze rendered HTML for individual blocks or entire posts/pages.
  * Version:           1.0.0
