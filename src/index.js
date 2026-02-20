@@ -1,4 +1,5 @@
 import { createHigherOrderComponent } from '@wordpress/compose';
+import { dispatch } from '@wordpress/data';
 import {
 	createPortal,
 	Fragment,
@@ -22,6 +23,10 @@ const WPPF_BLOCK_ATTRIBUTES = {
 	wppf_html: {
 		type: 'string',
 		default: '',
+	},
+	wppf_history: {
+		type: 'array',
+		default: [],
 	},
 };
 
@@ -52,6 +57,11 @@ const withBlockPinControl = createHigherOrderComponent(
 const withPinOverlay = createHigherOrderComponent(
 	( BlockListBlock ) => ( props ) => {
 		const isPinned = Boolean( props?.attributes?.wppf_is_pinned );
+		const pinnedHtml =
+			'string' === typeof props?.attributes?.wppf_html
+				? props.attributes.wppf_html
+				: '';
+		const hasPinnedHtmlPreview = Boolean( pinnedHtml.trim() );
 		if ( ! isPinned ) {
 			return <BlockListBlock { ...props } />;
 		}
@@ -70,11 +80,35 @@ const withPinOverlay = createHigherOrderComponent(
 			}
 		};
 
+		const onRequestSelect = () => {
+			if ( props?.clientId ) {
+				dispatch( 'core/block-editor' ).selectBlock( props.clientId );
+			}
+		};
+
 		return (
-			<div className="wppf-block-lock-wrapper">
-				<BlockListBlock { ...props } />
+			<div
+				className={ `wppf-block-lock-wrapper${
+					hasPinnedHtmlPreview
+						? ' wppf-block-lock-wrapper--has-preview'
+						: ''
+				}` }
+			>
+				<div className="wppf-block-lock-wrapper__source">
+					<BlockListBlock { ...props } />
+				</div>
+				{ hasPinnedHtmlPreview && (
+					<div className="wppf-block-live-preview" aria-hidden="true">
+						<div
+							className="wppf-block-live-preview__markup"
+							dangerouslySetInnerHTML={ { __html: pinnedHtml } }
+						/>
+					</div>
+				) }
 				<PinOverlay
 					label={ __( 'Bloque pineado', 'pin-freeze' ) }
+					actionLabel={ __( 'Despinear bloque', 'pin-freeze' ) }
+					onRequestSelect={ onRequestSelect }
 					onRequestUnpin={ onRequestUnpin }
 				/>
 			</div>

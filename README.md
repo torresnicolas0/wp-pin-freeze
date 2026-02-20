@@ -9,10 +9,11 @@ When pinned, dynamic rendering is replaced by static HTML and the visual editor 
 
 ## Release
 
-- Current version: `1.0.2`
-- Block pinning now captures rendered HTML for dynamic blocks (SSR) and avoids storing raw Gutenberg comment serialization as frozen HTML.
-- Dynamic block capture uses the Block Renderer REST endpoint with static-content fallback.
-- Block inspector now includes an Apply button and an applied-HTML preview before saving the post.
+- Current version: `1.0.3`
+- Pinned block preview now renders in the editor canvas (no isolated iframe preview).
+- Block inspector now stores a per-block history (latest 5 applied versions) with restore action.
+- Block sidebar action `Revertir borrador` was removed to simplify the apply workflow.
+- Admin list row actions now show only `Pinear` or `Despinear` depending on state.
 
 ## Requirements
 

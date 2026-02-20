@@ -11,6 +11,7 @@ const { Button, Notice, PanelBody, TextareaControl, ToggleControl } =
 	components;
 const CodeEditor = components.__experimentalCodeEditor || components.CodeEditor;
 const BLOCK_COMMENT_PATTERN = /^\s*<!--\s*wp:[\s\S]*-->\s*$/;
+const BLOCK_HISTORY_LIMIT = 5;
 
 function isCommentOnlyMarkup( html ) {
 	if ( ! html || 'string' !== typeof html ) {
@@ -28,14 +29,95 @@ function normalizeCapturedHtml( html ) {
 	return html.trim();
 }
 
+function normalizeHistoryEntries( history ) {
+	if ( ! Array.isArray( history ) ) {
+		return [];
+	}
+
+	return history
+		.filter(
+			( entry ) =>
+				entry &&
+				'object' === typeof entry &&
+				'string' === typeof entry.html
+		)
+		.map( ( entry ) => ( {
+			html: normalizeCapturedHtml( entry.html ),
+			capturedAt:
+				'string' === typeof entry.capturedAt ? entry.capturedAt : '',
+		} ) )
+		.filter(
+			( entry ) =>
+				'' !== entry.html && ! isCommentOnlyMarkup( entry.html )
+		)
+		.slice( 0, BLOCK_HISTORY_LIMIT );
+}
+
+function buildHistoryEntry( html ) {
+	return {
+		html,
+		capturedAt: new Date().toISOString(),
+	};
+}
+
+function pushHistoryEntry( previousHtml, history ) {
+	const normalizedPrevious = normalizeCapturedHtml( previousHtml );
+	const normalizedHistory = normalizeHistoryEntries( history );
+
+	if (
+		'' === normalizedPrevious ||
+		isCommentOnlyMarkup( normalizedPrevious )
+	) {
+		return normalizedHistory;
+	}
+
+	const deduplicated = normalizedHistory.filter(
+		( entry ) => entry.html !== normalizedPrevious
+	);
+
+	return [ buildHistoryEntry( normalizedPrevious ), ...deduplicated ].slice(
+		0,
+		BLOCK_HISTORY_LIMIT
+	);
+}
+
+function formatHistoryDate( isoDate ) {
+	if ( ! isoDate || 'string' !== typeof isoDate ) {
+		return __( 'Sin fecha', 'pin-freeze' );
+	}
+
+	const dateObject = new Date( isoDate );
+	if ( Number.isNaN( dateObject.getTime() ) ) {
+		return isoDate;
+	}
+
+	return dateObject.toLocaleString();
+}
+
+function createHistoryExcerpt( html ) {
+	const compact = normalizeCapturedHtml( html ).replace( /\s+/g, ' ' );
+	if ( ! compact ) {
+		return '';
+	}
+
+	if ( compact.length <= 96 ) {
+		return compact;
+	}
+
+	return `${ compact.slice( 0, 93 ) }...`;
+}
+
 function BlockPinControl( {
 	attributes,
 	clientId,
 	isSelected,
 	setAttributes,
 } ) {
-	const { wppf_html: pinnedHtml = '', wppf_is_pinned: isPinned = false } =
-		attributes || {};
+	const {
+		wppf_html: pinnedHtml = '',
+		wppf_is_pinned: isPinned = false,
+		wppf_history: blockHistory = [],
+	} = attributes || {};
 	const [ isCapturing, setIsCapturing ] = useState( false );
 	const [ captureError, setCaptureError ] = useState( '' );
 	const [ draftHtml, setDraftHtml ] = useState( pinnedHtml || '' );
@@ -56,6 +138,8 @@ function BlockPinControl( {
 	if ( ! isSelected ) {
 		return null;
 	}
+
+	const normalizedHistory = normalizeHistoryEntries( blockHistory );
 
 	const captureRenderedBlockHtml = async () => {
 		if ( ! block ) {
@@ -140,10 +224,14 @@ function BlockPinControl( {
 				setAttributes( {
 					wppf_is_pinned: true,
 					wppf_html: capturedHtml,
+					wppf_history: pushHistoryEntry(
+						pinnedHtml,
+						normalizedHistory
+					),
 				} );
 				setApplyNotice(
 					__(
-						'HTML capturado y aplicado. Revisa la vista previa antes de guardar.',
+						'HTML capturado y aplicado. Revisa el bloque pineado en el lienzo antes de guardar.',
 						'pin-freeze'
 					)
 				);
@@ -169,20 +257,54 @@ function BlockPinControl( {
 	};
 
 	const onApplyHtml = () => {
+		const nextHtml = draftHtml || '';
+		if ( nextHtml === ( pinnedHtml || '' ) ) {
+			return;
+		}
+
 		setCaptureError( '' );
-		setAttributes( { wppf_html: draftHtml || '' } );
+		setAttributes( {
+			wppf_html: nextHtml,
+			wppf_history: pushHistoryEntry( pinnedHtml, normalizedHistory ),
+		} );
 		setApplyNotice(
 			__(
-				'Cambios aplicados. Revisa la vista previa actualizada.',
+				'Cambios aplicados. Revisa el bloque pineado actualizado en el lienzo.',
 				'pin-freeze'
 			)
 		);
 	};
 
-	const onResetDraft = () => {
+	const onRestoreHistory = ( historyIndex ) => {
+		const selectedEntry = normalizedHistory[ historyIndex ];
+		if ( ! selectedEntry ) {
+			return;
+		}
+
+		if ( selectedEntry.html === ( pinnedHtml || '' ) ) {
+			setDraftHtml( selectedEntry.html );
+			setApplyNotice(
+				__( 'Esta versión ya está aplicada.', 'pin-freeze' )
+			);
+			return;
+		}
+
+		const updatedHistory = pushHistoryEntry(
+			pinnedHtml,
+			normalizedHistory.filter(
+				( _entry, index ) => index !== historyIndex
+			)
+		);
+
 		setCaptureError( '' );
-		setApplyNotice( '' );
-		setDraftHtml( pinnedHtml || '' );
+		setAttributes( {
+			wppf_html: selectedEntry.html,
+			wppf_history: updatedHistory,
+		} );
+		setDraftHtml( selectedEntry.html );
+		setApplyNotice(
+			__( 'Versión del historial restaurada y aplicada.', 'pin-freeze' )
+		);
 	};
 
 	let toggleHelp = __(
@@ -260,13 +382,6 @@ function BlockPinControl( {
 							>
 								{ __( 'Aplicar cambios', 'pin-freeze' ) }
 							</Button>
-							<Button
-								variant="secondary"
-								onClick={ onResetDraft }
-								disabled={ ! hasDraftChanges || isCapturing }
-							>
-								{ __( 'Revertir borrador', 'pin-freeze' ) }
-							</Button>
 						</div>
 
 						{ !! applyNotice && (
@@ -279,27 +394,67 @@ function BlockPinControl( {
 							</Notice>
 						) }
 
-						<p className="wppf-inspector-help">
-							{ __(
-								'Vista previa aplicada (antes de guardar la entrada):',
-								'pin-freeze'
-							) }
-						</p>
-						{ pinnedHtml ? (
-							<div
-								className="wppf-html-preview"
-								dangerouslySetInnerHTML={ {
-									__html: pinnedHtml,
-								} }
-							/>
-						) : (
-							<p className="wppf-html-preview-empty">
+						<div className="wppf-block-history">
+							<p className="wppf-inspector-help">
 								{ __(
-									'Aún no hay HTML aplicado.',
+									'Historial del bloque (últimas 5 versiones aplicadas):',
 									'pin-freeze'
 								) }
 							</p>
-						) }
+							{ normalizedHistory.length > 0 ? (
+								<ul className="wppf-block-history-list">
+									{ normalizedHistory.map(
+										( entry, index ) => (
+											<li
+												key={ `${
+													entry.capturedAt || 'entry'
+												}-${ index }` }
+												className="wppf-block-history-item"
+											>
+												<div className="wppf-block-history-meta">
+													<span className="wppf-block-history-date">
+														{ formatHistoryDate(
+															entry.capturedAt
+														) }
+													</span>
+													<code className="wppf-block-history-excerpt">
+														{ createHistoryExcerpt(
+															entry.html
+														) ||
+															__(
+																'(Sin contenido)',
+																'pin-freeze'
+															) }
+													</code>
+												</div>
+												<Button
+													variant="secondary"
+													size="small"
+													onClick={ () =>
+														onRestoreHistory(
+															index
+														)
+													}
+													disabled={ isCapturing }
+												>
+													{ __(
+														'Restaurar',
+														'pin-freeze'
+													) }
+												</Button>
+											</li>
+										)
+									) }
+								</ul>
+							) : (
+								<p className="wppf-block-history-empty">
+									{ __(
+										'Aún no hay historial para este bloque.',
+										'pin-freeze'
+									) }
+								</p>
+							) }
+						</div>
 					</>
 				) }
 			</PanelBody>

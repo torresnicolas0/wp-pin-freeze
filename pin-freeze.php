@@ -3,7 +3,7 @@
  * Plugin Name:       Pin & Freeze
  * Plugin URI:        https://github.com/torresnicolas0/wp-pin-freeze
  * Description:       Pin and freeze rendered HTML for individual blocks or entire posts/pages.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Nicolás Torres
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPPF_VERSION', '1.0.2' );
+define( 'WPPF_VERSION', '1.0.3' );
 define( 'WPPF_PLUGIN_FILE', __FILE__ );
 define( 'WPPF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPPF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -469,7 +469,7 @@ class WPPF_Plugin {
 		}
 
 		$states['wppf_pinned'] = sprintf(
-			'<span class="wppf-post-state"><span class="dashicons dashicons-pin" aria-hidden="true"></span>%s</span>',
+			'<span class="wppf-post-state dashicons-before dashicons-pin" aria-label="%1$s" title="%1$s"><span class="screen-reader-text">%1$s</span></span>',
 			esc_html__( 'Pineado', 'pin-freeze' )
 		);
 
@@ -484,20 +484,23 @@ class WPPF_Plugin {
 	 * @return array
 	 */
 	public static function page_row_actions( $actions, $post ) {
-		if ( ! self::is_post_pinned( $post->ID ) ) {
+		if ( ! current_user_can( 'edit_post', $post->ID ) ) {
 			return $actions;
 		}
 
-		$actions['wppf_pinned'] = sprintf(
-			'<span class="wppf-pinned-row-action"><span class="dashicons dashicons-pin" aria-hidden="true"></span>%s</span>',
-			esc_html__( 'Pineado', 'pin-freeze' )
-		);
-
-		$actions['wppf_unpin'] = sprintf(
-			'<a href="%1$s">%2$s</a>',
-			esc_url( self::get_unpin_url( $post ) ),
-			esc_html__( 'Despinear', 'pin-freeze' )
-		);
+		if ( self::is_post_pinned( $post->ID ) ) {
+			$actions['wppf_unpin'] = sprintf(
+				'<a class="wppf-row-action-link" href="%1$s">%2$s</a>',
+				esc_url( self::get_unpin_url( $post ) ),
+				esc_html__( 'Despinear', 'pin-freeze' )
+			);
+		} else {
+			$actions['wppf_pin'] = sprintf(
+				'<a class="wppf-row-action-link" href="%1$s">%2$s</a>',
+				esc_url( self::get_pin_url( $post ) ),
+				esc_html__( 'Pinear', 'pin-freeze' )
+			);
+		}
 
 		return $actions;
 	}
@@ -563,7 +566,7 @@ class WPPF_Plugin {
 		}
 
 		$action = sanitize_key( wp_unslash( $_GET['wppf_action'] ) );
-		if ( 'unpin_post' !== $action ) {
+		if ( ! in_array( $action, array( 'pin_post', 'unpin_post' ), true ) ) {
 			return;
 		}
 
@@ -573,24 +576,48 @@ class WPPF_Plugin {
 		}
 
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
-		if ( ! wp_verify_nonce( $nonce, 'wppf_unpin_post_' . $post_id ) ) {
+		$nonce_action = 'pin_post' === $action ? 'wppf_pin_post_' . $post_id : 'wppf_unpin_post_' . $post_id;
+		if ( ! wp_verify_nonce( $nonce, $nonce_action ) ) {
 			wp_die( esc_html__( 'Nonce inválido.', 'pin-freeze' ) );
 		}
 
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			if ( 'pin_post' === $action ) {
+				wp_die( esc_html__( 'No tienes permisos para pinear este contenido.', 'pin-freeze' ) );
+			}
+
 			wp_die( esc_html__( 'No tienes permisos para despinear este contenido.', 'pin-freeze' ) );
 		}
 
-		update_post_meta( $post_id, self::META_POST_PINNED, false );
-		delete_post_meta( $post_id, self::META_POST_HTML );
+		if ( 'pin_post' === $action ) {
+			$post = get_post( $post_id );
+			if ( ! $post instanceof WP_Post ) {
+				return;
+			}
+
+			$rendered_content = apply_filters( 'the_content', $post->post_content );
+			$rendered_content = is_string( $rendered_content ) ? trim( $rendered_content ) : '';
+
+			if ( '' === $rendered_content ) {
+				$rendered_content = (string) $post->post_content;
+			}
+
+			$rendered_content = self::maybe_allow_raw_html( $rendered_content );
+
+			update_post_meta( $post_id, self::META_POST_PINNED, true );
+			update_post_meta( $post_id, self::META_POST_HTML, $rendered_content );
+			set_transient( self::NOTICE_TRANSIENT . get_current_user_id(), 'post_pinned', MINUTE_IN_SECONDS );
+		} else {
+			update_post_meta( $post_id, self::META_POST_PINNED, false );
+			delete_post_meta( $post_id, self::META_POST_HTML );
+			set_transient( self::NOTICE_TRANSIENT . get_current_user_id(), 'post_unpinned', MINUTE_IN_SECONDS );
+		}
 
 		$referer = wp_get_referer();
 		if ( ! $referer ) {
 			$post_type = get_post_type( $post_id ) ?: 'post';
 			$referer   = add_query_arg( 'post_type', $post_type, admin_url( 'edit.php' ) );
 		}
-
-		set_transient( self::NOTICE_TRANSIENT . get_current_user_id(), 'post_unpinned', MINUTE_IN_SECONDS );
 
 		$redirect = remove_query_arg( array( 'wppf_action', 'post', '_wpnonce' ), $referer );
 
@@ -613,7 +640,12 @@ class WPPF_Plugin {
 
 		delete_transient( $transient_key );
 		$notice = sanitize_key( $notice );
-		if ( 'post_unpinned' !== $notice ) {
+		if ( ! in_array( $notice, array( 'post_pinned', 'post_unpinned' ), true ) ) {
+			return;
+		}
+
+		if ( 'post_pinned' === $notice ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Contenido pineado correctamente.', 'pin-freeze' ) . '</p></div>';
 			return;
 		}
 
@@ -689,6 +721,25 @@ class WPPF_Plugin {
 		);
 
 		return wp_nonce_url( $url, 'wppf_unpin_post_' . (int) $post->ID );
+	}
+
+	/**
+	 * Build pin URL.
+	 *
+	 * @param WP_Post $post Post object.
+	 * @return string
+	 */
+	private static function get_pin_url( $post ) {
+		$url = add_query_arg(
+			array(
+				'post_type'   => $post->post_type,
+				'wppf_action' => 'pin_post',
+				'post'        => (int) $post->ID,
+			),
+			admin_url( 'edit.php' )
+		);
+
+		return wp_nonce_url( $url, 'wppf_pin_post_' . (int) $post->ID );
 	}
 }
 

@@ -5,7 +5,7 @@ Tags: gutenberg, blocks, html, caching, editor
 Requires at least: 5.2
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,9 @@ Yes, for public post types registered with `show_in_rest` enabled.
 3. Admin posts list showing pinned state and violet title style.
 
 == Upgrade Notice ==
+= 1.0.3 =
+Improves block pin UX with in-canvas preview, block-level history restore, and cleaner admin list actions (Pinear/Despinear).
+
 = 1.0.2 =
 Adds an Apply workflow for pinned block HTML editing and updates pinned overlay styling for clearer visual lock state.
 
@@ -62,6 +65,14 @@ Improves block pin capture to store rendered HTML for dynamic blocks instead of 
 Initial public release.
 
 == Changelog ==
+= 1.0.3 =
+* Moved pinned block preview to render in the editor canvas (no isolated iframe preview).
+* Added block-level pin history (latest 5 applied versions) with restore action.
+* Removed block sidebar \"Revertir borrador\" action to simplify apply workflow.
+* Updated pinned overlay interaction with explicit \"Despinear bloque\" action and improved select behavior.
+* Refined admin list row actions: now shows only \"Pinear\" or \"Despinear\" as appropriate.
+* Refined admin pinned state marker alignment and icon-only visual marker.
+
 = 1.0.2 =
 * Added \"Aplicar cambios\" workflow for pinned block HTML edits in the inspector.
 * Added applied HTML preview in the inspector before saving the post.

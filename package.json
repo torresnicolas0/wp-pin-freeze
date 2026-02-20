@@ -1,6 +1,6 @@
 {
   "name": "pin-freeze",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Pin and freeze rendered HTML for Gutenberg blocks and full posts/pages.",
   "license": "GPL-2.0-or-later",
   "main": "build/index.js",
