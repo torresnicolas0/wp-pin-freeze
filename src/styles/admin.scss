@@ -67,11 +67,15 @@ body.wppf-post-is-pinned .wppf-pin-overlay--post {
 	font-size: 12px;
 }
 
+.wppf-block-capture-notice {
+	margin: 10px 0;
+}
+
 .wppf-code-editor textarea,
 .wppf-code-editor-fallback textarea,
 .wppf-post-code-editor textarea,
 .wppf-post-code-editor-fallback textarea {
-	font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 	font-size: 12px;
 }
 
@@ -157,5 +161,5 @@ body.wppf-post-is-pinned .wppf-pin-overlay--post {
 }
 
 .wp-list-table .dashicons-pin:before {
-	content: '\f537';
+	content: "\f537";
 }

@@ -5,7 +5,7 @@ Tags: gutenberg, blocks, html, caching, editor
 Requires at least: 5.2
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ When an item is pinned, dynamic rendering is replaced by static HTML and the vis
 Key features:
 
 - Global block attributes: `wppf_is_pinned`, `wppf_html`.
+- Dynamic block pin capture stores rendered HTML (SSR) instead of raw Gutenberg serialization comments.
 - `render_block` interception for pinned blocks.
 - `the_content` interception for pinned posts/pages.
 - Inspector controls for block pinning and static HTML editing.
@@ -51,10 +52,19 @@ Yes, for public post types registered with `show_in_rest` enabled.
 3. Admin posts list showing pinned state and violet title style.
 
 == Upgrade Notice ==
+= 1.0.1 =
+Improves block pin capture to store rendered HTML for dynamic blocks instead of serialized block comments.
+
 = 1.0.0 =
 Initial public release.
 
 == Changelog ==
+= 1.0.1 =
+* Block pinning now captures rendered HTML for dynamic blocks via Block Renderer REST endpoint.
+* Added safe fallback for static blocks using block content generation.
+* Prevented pinning when only serialized Gutenberg block comments are captured.
+* Improved inspector feedback when rendered HTML capture fails.
+
 = 1.0.0 =
 * Initial release.
 * Block-level pinning with overlay lock and inspector code editor.

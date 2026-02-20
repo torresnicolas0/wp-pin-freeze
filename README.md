@@ -7,6 +7,12 @@ WordPress plugin to pin/freeze rendered HTML for:
 
 When pinned, dynamic rendering is replaced by static HTML and the visual editor is locked to avoid accidental edits.
 
+## Release
+
+- Current version: `1.0.1`
+- Block pinning now captures rendered HTML for dynamic blocks (SSR) and avoids storing raw Gutenberg comment serialization as frozen HTML.
+- Dynamic block capture uses the Block Renderer REST endpoint with static-content fallback.
+
 ## Requirements
 
 - WordPress 5.2+
@@ -35,6 +41,7 @@ Compiled assets are generated in `build/`.
 - `includes/settings-page.php` settings page (`Ajustes > Pin & Freeze`).
 - `includes/ajax-fetcher.php` frontend capture via AJAX.
 - `includes/history-manager.php` snapshot history manager.
+- `docs/BLOCK_PIN_RENDER_CAPTURE.md` technical note for dynamic block pin capture strategy.
 - `src/` editor-side React code.
 - `languages/` translations.
 
