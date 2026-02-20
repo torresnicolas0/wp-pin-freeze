@@ -9,9 +9,10 @@ When pinned, dynamic rendering is replaced by static HTML and the visual editor 
 
 ## Release
 
-- Current version: `1.0.1`
+- Current version: `1.0.2`
 - Block pinning now captures rendered HTML for dynamic blocks (SSR) and avoids storing raw Gutenberg comment serialization as frozen HTML.
 - Dynamic block capture uses the Block Renderer REST endpoint with static-content fallback.
+- Block inspector now includes an Apply button and an applied-HTML preview before saving the post.
 
 ## Requirements
 

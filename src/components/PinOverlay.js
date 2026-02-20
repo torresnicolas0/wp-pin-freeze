@@ -28,13 +28,15 @@ function PinOverlay( { className = '', label = '', onRequestUnpin } ) {
 			onKeyDown={ onKeyDown }
 		>
 			<span className="dashicons dashicons-lock" aria-hidden="true" />
-			<span className="wppf-pin-overlay__title">
-				{ label ||
-					__( 'Este contenido está pineado.', 'pin-freeze' ) }
-			</span>
-			<span className="wppf-pin-overlay__subtitle">
-				{ __( 'Haz clic para despinearlo.', 'pin-freeze' ) }
-			</span>
+			<div className="wppf-pin-overlay__content">
+				<span className="wppf-pin-overlay__title">
+					{ label ||
+						__( 'Este contenido está pineado.', 'pin-freeze' ) }
+				</span>
+				<span className="wppf-pin-overlay__subtitle">
+					{ __( 'Haz clic para despinearlo.', 'pin-freeze' ) }
+				</span>
+			</div>
 		</div>
 	);
 }

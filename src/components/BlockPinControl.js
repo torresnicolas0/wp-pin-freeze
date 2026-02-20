@@ -2,12 +2,13 @@ import apiFetch from '@wordpress/api-fetch';
 import { getBlockContent, getBlockType } from '@wordpress/blocks';
 import { InspectorControls } from '@wordpress/block-editor';
 import * as components from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 
-const { Notice, PanelBody, TextareaControl, ToggleControl } = components;
+const { Button, Notice, PanelBody, TextareaControl, ToggleControl } =
+	components;
 const CodeEditor = components.__experimentalCodeEditor || components.CodeEditor;
 const BLOCK_COMMENT_PATTERN = /^\s*<!--\s*wp:[\s\S]*-->\s*$/;
 
@@ -37,6 +38,8 @@ function BlockPinControl( {
 		attributes || {};
 	const [ isCapturing, setIsCapturing ] = useState( false );
 	const [ captureError, setCaptureError ] = useState( '' );
+	const [ draftHtml, setDraftHtml ] = useState( pinnedHtml || '' );
+	const [ applyNotice, setApplyNotice ] = useState( '' );
 
 	const { block, postId } = useSelect(
 		( select ) => ( {
@@ -45,6 +48,10 @@ function BlockPinControl( {
 		} ),
 		[ clientId ]
 	);
+
+	useEffect( () => {
+		setDraftHtml( pinnedHtml || '' );
+	}, [ pinnedHtml ] );
 
 	if ( ! isSelected ) {
 		return null;
@@ -112,12 +119,14 @@ function BlockPinControl( {
 	const onTogglePin = async ( nextValue ) => {
 		if ( ! nextValue ) {
 			setCaptureError( '' );
+			setApplyNotice( '' );
 			setAttributes( { wppf_is_pinned: false } );
 			return;
 		}
 
 		if ( pinnedHtml && ! isCommentOnlyMarkup( pinnedHtml ) ) {
 			setCaptureError( '' );
+			setApplyNotice( '' );
 			setAttributes( { wppf_is_pinned: true } );
 			return;
 		}
@@ -132,6 +141,12 @@ function BlockPinControl( {
 					wppf_is_pinned: true,
 					wppf_html: capturedHtml,
 				} );
+				setApplyNotice(
+					__(
+						'HTML capturado y aplicado. Revisa la vista previa antes de guardar.',
+						'pin-freeze'
+					)
+				);
 				return;
 			}
 
@@ -149,7 +164,25 @@ function BlockPinControl( {
 
 	const onChangeHtml = ( nextHtml ) => {
 		setCaptureError( '' );
-		setAttributes( { wppf_html: nextHtml || '' } );
+		setApplyNotice( '' );
+		setDraftHtml( nextHtml || '' );
+	};
+
+	const onApplyHtml = () => {
+		setCaptureError( '' );
+		setAttributes( { wppf_html: draftHtml || '' } );
+		setApplyNotice(
+			__(
+				'Cambios aplicados. Revisa la vista previa actualizada.',
+				'pin-freeze'
+			)
+		);
+	};
+
+	const onResetDraft = () => {
+		setCaptureError( '' );
+		setApplyNotice( '' );
+		setDraftHtml( pinnedHtml || '' );
 	};
 
 	let toggleHelp = __(
@@ -170,6 +203,8 @@ function BlockPinControl( {
 			'pin-freeze'
 		);
 	}
+
+	const hasDraftChanges = draftHtml !== ( pinnedHtml || '' );
 
 	return (
 		<InspectorControls>
@@ -202,7 +237,7 @@ function BlockPinControl( {
 						</p>
 						{ CodeEditor ? (
 							<CodeEditor
-								value={ pinnedHtml }
+								value={ draftHtml }
 								onChange={ onChangeHtml }
 								language="html"
 								className="wppf-code-editor"
@@ -210,11 +245,60 @@ function BlockPinControl( {
 						) : (
 							<TextareaControl
 								label={ __( 'Frozen HTML', 'pin-freeze' ) }
-								value={ pinnedHtml }
+								value={ draftHtml }
 								onChange={ onChangeHtml }
 								rows={ 12 }
 								className="wppf-code-editor-fallback"
 							/>
+						) }
+
+						<div className="wppf-html-actions">
+							<Button
+								variant="primary"
+								onClick={ onApplyHtml }
+								disabled={ ! hasDraftChanges || isCapturing }
+							>
+								{ __( 'Aplicar cambios', 'pin-freeze' ) }
+							</Button>
+							<Button
+								variant="secondary"
+								onClick={ onResetDraft }
+								disabled={ ! hasDraftChanges || isCapturing }
+							>
+								{ __( 'Revertir borrador', 'pin-freeze' ) }
+							</Button>
+						</div>
+
+						{ !! applyNotice && (
+							<Notice
+								status="success"
+								isDismissible={ false }
+								className="wppf-block-capture-notice"
+							>
+								<p>{ applyNotice }</p>
+							</Notice>
+						) }
+
+						<p className="wppf-inspector-help">
+							{ __(
+								'Vista previa aplicada (antes de guardar la entrada):',
+								'pin-freeze'
+							) }
+						</p>
+						{ pinnedHtml ? (
+							<div
+								className="wppf-html-preview"
+								dangerouslySetInnerHTML={ {
+									__html: pinnedHtml,
+								} }
+							/>
+						) : (
+							<p className="wppf-html-preview-empty">
+								{ __(
+									'Aún no hay HTML aplicado.',
+									'pin-freeze'
+								) }
+							</p>
 						) }
 					</>
 				) }
