@@ -2,6 +2,10 @@
 
 WordPress plugin to pin/freeze rendered HTML for:
 
+## Repository
+
+- https://github.com/torresnicolas0/wp-pin-freeze
+
 - Individual Gutenberg blocks.
 - Entire posts/pages.
 
