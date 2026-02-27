@@ -88,8 +88,18 @@ class WPPF_Ajax_Fetcher {
 			);
 		}
 
-		$selector = class_exists( 'WPPF_Settings_Page' ) ? WPPF_Settings_Page::get_capture_selector() : '#content';
-		$html     = self::extract_selector_html( $raw_html, $selector );
+		$selector_contract = class_exists( 'WPPF_Settings_Page' )
+			? WPPF_Settings_Page::get_capture_selector_contract()
+			: array(
+				'type'  => 'id',
+				'value' => 'content',
+			);
+
+		$selector_type  = isset( $selector_contract['type'] ) ? (string) $selector_contract['type'] : 'id';
+		$selector_value = isset( $selector_contract['value'] ) ? (string) $selector_contract['value'] : 'content';
+		$selector_label = self::format_selector_label( $selector_type, $selector_value );
+
+		$html = self::extract_selector_html( $raw_html, $selector_type, $selector_value );
 		if ( is_wp_error( $html ) ) {
 			wp_send_json_error(
 				array(
@@ -108,7 +118,9 @@ class WPPF_Ajax_Fetcher {
 				'post_id'   => $post_id,
 				'permalink' => esc_url_raw( $permalink ),
 				'request'   => $request_result['request_type'],
-				'selector'  => $selector,
+				'selector'  => $selector_label,
+				'selector_type' => $selector_type,
+				'selector_value' => $selector_value,
 				'html'      => (string) $html,
 			)
 		);
@@ -225,24 +237,29 @@ class WPPF_Ajax_Fetcher {
 	 * Extract HTML by selector.
 	 *
 	 * @param string $document_html Full HTML document.
-	 * @param string $selector CSS selector.
+	 * @param string $selector_type Selector type contract.
+	 * @param string $selector_value Selector value contract.
 	 * @return string|WP_Error
 	 */
-	private static function extract_selector_html( $document_html, $selector ) {
+	private static function extract_selector_html( $document_html, $selector_type, $selector_value ) {
 		if ( ! class_exists( 'DOMDocument' ) ) {
 			return new WP_Error( 'dom_missing', __( 'DOMDocument no está disponible en este servidor.', 'pin-freeze' ) );
 		}
 
-		$selector = trim( (string) $selector );
-		if ( '' === $selector ) {
-			$selector = '#content';
+		$selector_type = sanitize_key( (string) $selector_type );
+		$selector_value = trim( (string) $selector_value );
+		if ( '' === $selector_type || '' === $selector_value ) {
+			return new WP_Error(
+				'invalid_selector',
+				__( 'Contrato de selector inválido: faltan tipo o valor.', 'pin-freeze' )
+			);
 		}
 
-		$xpath_query = self::css_selector_to_xpath( $selector );
+		$xpath_query = self::contract_selector_to_xpath( $selector_type, $selector_value );
 		if ( '' === $xpath_query ) {
 			return new WP_Error(
 				'invalid_selector',
-				__( 'El selector configurado es inválido. Usa #id, .class o nombre de etiqueta.', 'pin-freeze' )
+				__( 'El selector configurado es inválido para el tipo elegido (id/class/tag/xpath).', 'pin-freeze' )
 			);
 		}
 
@@ -262,9 +279,10 @@ class WPPF_Ajax_Fetcher {
 			return new WP_Error(
 				'selector_not_found',
 				sprintf(
-					/* translators: %s: selector */
-					__( 'No se encontró contenido para el selector "%s".', 'pin-freeze' ),
-					esc_html( $selector )
+					/* translators: 1: selector type, 2: selector value */
+					__( 'No se encontró contenido para el selector %1$s="%2$s".', 'pin-freeze' ),
+					esc_html( $selector_type ),
+					esc_html( $selector_value )
 				)
 			);
 		}
@@ -283,40 +301,71 @@ class WPPF_Ajax_Fetcher {
 	}
 
 	/**
-	 * Convert basic CSS selector to XPath query.
+	 * Convert typed selector contract to XPath query.
 	 *
-	 * @param string $selector CSS selector.
+	 * @param string $selector_type Selector type.
+	 * @param string $selector_value Selector value.
 	 * @return string
 	 */
-	private static function css_selector_to_xpath( $selector ) {
-		$selector = trim( (string) $selector );
-		if ( '' === $selector ) {
+	private static function contract_selector_to_xpath( $selector_type, $selector_value ) {
+		$selector_type = sanitize_key( (string) $selector_type );
+		$selector_value = trim( (string) $selector_value );
+		if ( '' === $selector_type || '' === $selector_value ) {
 			return '';
 		}
 
-		if ( 0 === strpos( $selector, '#' ) ) {
-			$id = substr( $selector, 1 );
-			if ( ! preg_match( '/^[A-Za-z0-9_-]+$/', $id ) ) {
+		if ( 'id' === $selector_type ) {
+			if ( ! preg_match( '/^[A-Za-z0-9_-]+$/', $selector_value ) ) {
 				return '';
 			}
 
-			return '//*[@id="' . $id . '"]';
+			return '//*[@id="' . $selector_value . '"]';
 		}
 
-		if ( 0 === strpos( $selector, '.' ) ) {
-			$class_name = substr( $selector, 1 );
-			if ( ! preg_match( '/^[A-Za-z0-9_-]+$/', $class_name ) ) {
+		if ( 'class' === $selector_type ) {
+			if ( ! preg_match( '/^[A-Za-z0-9_-]+$/', $selector_value ) ) {
 				return '';
 			}
 
-			return '//*[contains(concat(" ", normalize-space(@class), " "), " ' . $class_name . ' ")]';
+			return '//*[contains(concat(" ", normalize-space(@class), " "), " ' . $selector_value . ' ")]';
 		}
 
-		if ( preg_match( '/^[A-Za-z][A-Za-z0-9:-]*$/', $selector ) ) {
-			return '//' . strtolower( $selector );
+		if ( 'tag' === $selector_type ) {
+			if ( preg_match( '/^[A-Za-z][A-Za-z0-9:-]*$/', $selector_value ) !== 1 ) {
+				return '';
+			}
+			return '//' . strtolower( $selector_value );
+		}
+
+		if ( 'xpath' === $selector_type ) {
+			if ( strpos( $selector_value, '/' ) !== 0 ) {
+				return '';
+			}
+			return $selector_value;
 		}
 
 		return '';
+	}
+
+	/**
+	 * @param string $selector_type Selector type.
+	 * @param string $selector_value Selector value.
+	 * @return string
+	 */
+	private static function format_selector_label( $selector_type, $selector_value ) {
+		$selector_type = sanitize_key( (string) $selector_type );
+		$selector_value = (string) $selector_value;
+		if ( 'id' === $selector_type ) {
+			return '#' . $selector_value;
+		}
+		if ( 'class' === $selector_type ) {
+			return '.' . $selector_value;
+		}
+		if ( 'tag' === $selector_type ) {
+			return strtolower( $selector_value );
+		}
+
+		return $selector_value;
 	}
 
 	/**

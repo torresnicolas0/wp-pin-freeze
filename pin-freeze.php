@@ -350,6 +350,8 @@ class WPPF_Plugin {
 				'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
 				'nonce'             => wp_create_nonce( 'wppf_editor_nonce' ),
 				'captureSelector'   => class_exists( 'WPPF_Settings_Page' ) ? WPPF_Settings_Page::get_capture_selector() : '#content',
+				'captureSelectorType' => class_exists( 'WPPF_Settings_Page' ) ? WPPF_Settings_Page::get_capture_selector_contract()['type'] : 'id',
+				'captureSelectorValue' => class_exists( 'WPPF_Settings_Page' ) ? WPPF_Settings_Page::get_capture_selector_contract()['value'] : 'content',
 				'snapshotPostType'  => class_exists( 'WPPF_History_Manager' ) ? WPPF_History_Manager::POST_TYPE : 'wppf_snapshot',
 			)
 		);
