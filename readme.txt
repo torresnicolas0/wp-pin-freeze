@@ -11,6 +11,11 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Pin and freeze dynamic block output or full post/page content as editable static HTML.
 
+== Repository Notice ==
+This repository is deprecated and kept for historical compatibility.
+Active development and new releases moved to:
+https://github.com/torresnicolas0/sectioncore-pin-freeze
+
 == Description ==
 Pin & Freeze lets administrators and editors freeze rendered HTML in two scopes:
 

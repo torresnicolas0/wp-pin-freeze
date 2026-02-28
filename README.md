@@ -1,5 +1,12 @@
 # Pin & Freeze
 
+> [!IMPORTANT]
+> This repository is deprecated and kept only for historical compatibility.
+> Active development and new releases are now published in:
+> **https://github.com/torresnicolas0/sectioncore-pin-freeze**
+>
+> If you are integrating this plugin, migrate to the new repository and slug (`sectioncore-pin-freeze`).
+
 WordPress plugin to pin/freeze rendered HTML for:
 
 ## Repository
